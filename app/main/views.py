@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, abort, jsonify, request
+from flask import render_template, session, redirect, url_for, abort, jsonify, request, flash
 from flask_login import login_required
 from . import main
 from .forms import NameForm
@@ -17,6 +17,10 @@ quiz_models = {
 @main.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('main/index.html')
+
+@main.route('/quiz_intro')
+def quiz_intro():
+    return render_template('main/quiz_intro.html')
 
 @main.route('/secret')
 @login_required
@@ -40,7 +44,7 @@ def user(email):
     leaderboard = [(1, first), (2, second)]
     return render_template('main/user_page.html', email=email, quizzes=quizzes, leaderboard=leaderboard)
 
-@main.route('/user/<email>/<quiz>')
+@main.route('/user/<email>/<quiz>', methods=['GET', 'POST'])
 @login_required
 def quiz(email, quiz):
     quiz_id = str(uuid4())
@@ -63,27 +67,26 @@ def quiz(email, quiz):
 
             questions_list.append(question_dict)
 
-        session[quiz_id] = checker_list
-        return render_template('main/quiz.html', questions=questions_list, quiz_id=quiz_id)
+        session['quiz_id'] = checker_list
+        return render_template('main/quiz.html', questions=questions_list, quiz_id=quiz_id, start=False, email=email)
     
-@main.route('/user/<email>/<quiz>/result', methods=['GET', 'POST'])
+@main.route('/user/<email>/result', methods=['GET', 'POST'])
 @login_required
-def result(email, quiz):
-    model = quiz_models.get(quiz)
-    if model:
-        question_ids = request.form.getlist('question_id')
-        chosen_answers = {}
-        for question_id in question_ids:
-            chosen_answer = request.form.get(f'answer_{question_id}')
-            chosen_answers[question_id] = chosen_answer
-        
-        score = 0
-        checker_list = session.get(quiz_id)
-        index = 0
-        for question_id, chosen_answer in chosen_answers.items():
-            if question_id in checker_list and chosen_answer == checker_list[question_id]:
-                score += 1
-        
-        total_questions = len(question_ids)
-        percentage_score = (score / total_questions) * 100
-        return f'Quiz marked successfully. Your score: {percentage_score}%'
+def result(email):
+    question_ids = request.form.getlist('question_id')
+    chosen_answers = {}
+    for question_id in question_ids:
+        chosen_answer = request.form.get(f'answer_{question_id}')
+        chosen_answers[question_id] = chosen_answer
+    
+    score = 0
+    checker_list = session.get('quiz_id')
+
+    for question_id, chosen_answer in chosen_answers.items():
+        if question_id in checker_list and chosen_answer == checker_list[question_id]:
+            score += 1
+    
+    total_questions = len(question_ids)
+    percentage_score = (score / total_questions) * 100
+    # return render_template('result.html',)
+    return f'Quiz marked successfully. Your score: {percentage_score}%'

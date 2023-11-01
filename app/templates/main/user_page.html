@@ -5,11 +5,12 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='user_page.css') }}">
 {% endblock %}
 
-{% block content %}
+
+
+
 <body>
-    <div class="header">
-        <h1>User Dashboard</h1>
-    </div>
+    {% block filler %} User Dashboard {% endblock %}
+    {% block content %}
     <div class="container">
         <div class="welcome-message">
             <h2>Welcome, {{ email }}</h2>
@@ -44,6 +45,7 @@
             </table>
         </div>
     </div>
+    {% endblock %}
 </body>
-{% endblock %}
+
 </html>

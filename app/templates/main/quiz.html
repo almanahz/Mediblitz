@@ -5,14 +5,81 @@
 <head>
     <title>Quiz Questions</title>
     <style>
+        body {
+            background-color: #f2f2f2;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+    
+        h1 {
+            text-align: center;
+        }
+
+        .quiz_id {
+            display: none;
+        }
+    
+        #startBtnContainer, #questionContainer {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            text-align: left;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    
+        #startBtn, #nextBtn, #submitBtn {
+            background-color: #4c79f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    
+        #startBtn:hover, #nextBtn:hover, #submitBtn:hover {
+            background-color: #3666a9;
+        }
+    
+        .question {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+    
         .timer {
-            float: right;
             font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+    
+        input[type="radio"] {
+            transform: scale(1.5);
+            margin-right: 10px;
+            margin-top: 20px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 10px;
         }
     </style>
     <script>
         var timeLeft = 30; // Time in seconds
         var timerId;
+        var questionIndex = 0; // Index of the current question
+
+        function startQuiz() {
+            document.getElementById('startBtn').style.display = 'none'; // Hide the start button
+            document.getElementById('startBtnContainer').style.display = 'none'; // Hide the instruction page
+            document.getElementById('questionContainer').style.display = 'block'; // Show the question container
+            displayQuestion(); // Display the first question
+            startTimer(); // Start the timer
+        }
 
         function startTimer() {
             timerId = setInterval(countdown, 1000);
@@ -21,11 +88,36 @@
         function countdown() {
             if (timeLeft === 0) {
                 clearInterval(timerId);
-                submitForm(); // Submit the form when the time runs out
+                nextQuestion(); // Move to the next question when the time runs out
             } else {
-                document.getElementById("timer").textContent = timeLeft + "s";
+                document.getElementById("timer").textContent = "Time Left: " + timeLeft + "s";
                 timeLeft--;
             }
+        }
+
+        function displayQuestion() {
+            var questions = document.getElementsByClassName("question");
+            for (var i = 0; i < questions.length; i++) {
+                questions[i].style.display = "none"; // Hide all questions
+            }
+            questions[questionIndex].style.display = "block"; // Show the current question
+        }
+
+        function nextQuestion() {
+            clearInterval(timerId); // Stop the timer
+            questionIndex++; // Move to the next question
+            if (questionIndex < {{ questions|length }} ) {
+                timeLeft = 30; // Reset the timer for the next question
+                displayQuestion(); // Display the next question
+                startTimer(); // Start the timer
+            } else {
+                showSubmitButton(); // Show the submit button if all questions have been answered
+            }
+        }
+
+        function showSubmitButton() {
+            document.getElementById("nextBtn").style.display = "none"; // Hide the next button
+            document.getElementById("submitBtn").style.display = "block"; // Show the submit button
         }
 
         function submitForm() {
@@ -38,52 +130,47 @@
     <h1>Quiz Questions</h1>
 
     {% if questions %}
-        {% if not start %}
+        <div id="startBtnContainer">
             <h3>Instructions:</h3>
-            <p>Read each question carefully and select the correct answer. You have 30 seconds to answer each question. Click the "Start" button when you're ready to begin.</p>
-            <button onclick="startTimer(); document.getElementById('startBtn').style.display = 'none';">Start</button>
-        {% else %}
-            <form id="quizForm" action="/mark-quiz" method="POST">
-                {% for question in questions %}
-                    {% if loop.index == 1 %}
-                        <h3>Question {{ loop.index }}:</h3>
-                        <p>{{ question.question_text }}</p>
-                        <ul>
-                    {% endif %}
-                    
-                    {% if loop.index != 1 %}
-                        </ul>
-                        <h3>Question {{ loop.index }}:</h3>
-                        <p>{{ question.question_text }}</p>
-                        <ul>
-                    {% endif %}
-                     <input type="hidden" name="question_id" value="{{ question.question_id }}">
-                    <li>
-                        <input type="radio" name="answer_{{ question.question_id }}" value="A">
-                        {{ question.option_A }}
-                    </li>
-                    <li>
-                        <input type="radio" name="answer_{{ question.question_id }}" value="B">
-                        {{ question.option_B }}
-                    </li>
-                    <li>
-                        <input type="radio" name="answer_{{ question.question_id }}" value="C">
-                        {{ question.option_C }}
-                    </li>
-                    <li>
-                        <input type="radio" name="answer_{{ question.question_id }}" value="D">
-                        {{ question.option_D }}
-                    </li>
-                    
-                    {% if loop.last %}
-                        </ul>
-                        <div class="timer" id="timer">{{ timeLeft }}s</div>
-                    {% endif %}
-                {% endfor %}
-                
-                <button type="button" onclick="submitForm();">Submit Answers</button>
-            </form>
-        {% endif %}
+            <p>Read each question carefully and select the correct answer. Each question will be displayed for 30 seconds. Click the "Start" button when you're ready to begin.</p>
+            <button id="startBtn" onclick="startQuiz();">Start</button>
+        </div>
+    <form id="quizForm" method="post" action="{{ url_for('main.result', email=email) }}" onsubmit="submitForm()">
+        <div id="questionContainer" style="display: none;">
+            <div class="timer" id="timer"></div>
+
+            {% for question in questions %}
+                <div class="question" style="display: none;">
+                    <h3>Question {{ loop.index }}:</h3>
+                    <p>{{ question.question_text }}</p>
+                    <ul>
+                        <input type="hidden" name="question_id" value="{{ question.question_id }}">
+                        <li>
+                            <input type="radio" name="answer_{{ question.question_id }}" value="A">
+                            {{ question.option_A }}
+                        </li>
+                        <li>
+                            <input type="radio" name="answer_{{ question.question_id }}" value="B">
+                            {{ question.option_B }}
+                        </li>
+                        <li>
+                            <input type="radio" name="answer_{{ question.question_id }}" value="C">
+                            {{ question.option_C }}
+                        </li>
+                        <li>
+                            <input type="radio" name="answer_{{ question.question_id }}" value="D">
+                            {{ question.option_D }}
+                        </li>
+                    </ul>
+                </div>
+            {% endfor %}
+
+            <button type="button" id="nextBtn" onclick="nextQuestion();">Next</button>
+            <button type="button" id="submitBtn" onclick="submitForm();" style="display: none;">Submit</button>
+        </div>
+        <p class="quiz_id" name="quiz_id">{{ quiz_id }}</p>
+    </form>
     {% endif %}
+    
 </body>
 </html>

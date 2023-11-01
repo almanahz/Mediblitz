@@ -1,0 +1,18 @@
+{% extends 'main/index.html' %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='quiz_intro.css') }}">
+{% endblock %}
+
+{% block content %}
+<body>
+    <div class="container">
+        <div>
+            <h1>Welcome to Mediblitz Quiz!</h1>
+            <p>Mediblitz Quiz is a challenging and engaging quiz designed to evaluate your medical knowledge across various topics. Answer a series of carefully crafted questions and see how well you perform!</p>
+            <button class="start-button"><a href="{{ url_for('auth.register')}}">Start Quiz</a></button>
+        </div>
+    </div>
+</body>
+{% endblock %}

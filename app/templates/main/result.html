@@ -1,0 +1,62 @@
+<!-- result.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Results</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .question {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .question p {
+            margin: 0;
+        }
+        
+        .correct-answer {
+            color: green;
+        }
+        
+        .picked-answer {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Results</h1>
+        
+        {% for question_id, question_text in questions.items() %}
+            <div class="question">
+                <p>{{ question_text }}</p>
+                <p class="correct-answer">Correct Answer: {{ correct_answers[question_id] }}</p>
+                <p class="picked-answer">Your Answer: {{ picked_answers[question_id] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Your custom JavaScript code here
+    </script>
+</body>
+</html>

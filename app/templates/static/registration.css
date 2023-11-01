@@ -60,6 +60,12 @@ input[type="radio"] {
 	gap: 5px;
 }
 
+small {
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-end;
+}
+
 button {
 	background-color: #4070F4;
 	color: #FFFFFF;

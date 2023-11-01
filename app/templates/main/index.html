@@ -7,7 +7,7 @@
    {% block css %} 
     <title>{% block title %} Octamedic {% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     {% endblock %}
 
     {% block script %}
@@ -20,19 +20,21 @@
     <nav>
         <div class="nav-bar">
             <i class='bx bx-menu sidebarOpen' ></i>
-            <span class="logo navLogo"><a href="#">Octamedic</a></span>
+            <box-icon  type="logo" name="facebook-square"></box-icon>
+            <span class="logo navLogo">{% block filler %}<a href="{{ url_for('main.index') }}"> Octamedic </a>{% endblock %}</span>
 
             <div class="menu">
                 <div class="logo-toggle">
-                    <span class="logo"><a href="#">Octamedic</a></span>
+                    <span class="logo"><a href="#">Octamedic </a></span>
                     <i class='bx bx-x siderbarClose'></i>
+                    <i class='bx bx-plus-medical bx-rotate-90' undefined ></i>
                 </div>
 
                 <ul class="nav-links">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
                     <li><a href="#">About</a></li>
-                    <li><a href="#">Portfolio</a></li>
-                    <li><a href="#">Services</a></li>
+                    <li><a href="{{ url_for( 'main.quiz_intro' )}}">Portfolio</a></li>
+                    <li><a href="">Blog</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
             </div>
@@ -75,12 +77,7 @@
         <h2 class="section-title">Innovation at the Intersection</h2>
         <p class="section-description">OctaMedic thrives at the intersection of healthcare and technology. We harness the power of data analytics and machine learning to unlock valuable insights from medical data, empowering healthcare professionals to make informed decisions and optimize treatment plans. By embracing the potential of artificial intelligence, we aim to revolutionize personalized medicine, paving the way for more precise and tailored healthcare solutions.</p>
         <div class="animation-container">
-          <div class="animation-item">
-            <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22300%22%20viewBox%3D%220%200%20300%20300%22%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22150%22%20r%3D%22120%22%20fill%3D%22%23ff6600%22%2F%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22150%22%20r%3D%2280%22%20fill%3D%22%23ffffff%22%2F%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22150%22%20r%3D%2260%22%20fill%3D%22%23ff6600%22%2F%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22150%22%20r%3D%2240%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E" alt="Data Analytics Animation">
-          </div>
-          <div class="animation-item">
-            <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22300%22%20viewBox%3D%220%200%20300%20300%22%3E%3Cpath%20d%3D%22M150%200L0%20288l50%2024%2024%2050%20288-150L150%200zm0%20120l105%2054-37%20104h-72l-37-104L150%20120zm37%20296l-96-256h192l-96%20256z%22%20fill%3D%22%23ff6600%22%2F%3E%3C%2Fsvg%3E" alt="Artificial Intelligence Animation">
-          </div>
+          
         </div>
       </section>
       {% endblock %}
