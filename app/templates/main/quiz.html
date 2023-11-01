@@ -1,0 +1,89 @@
+<!-- random_questions.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Questions</title>
+    <style>
+        .timer {
+            float: right;
+            font-size: 24px;
+        }
+    </style>
+    <script>
+        var timeLeft = 30; // Time in seconds
+        var timerId;
+
+        function startTimer() {
+            timerId = setInterval(countdown, 1000);
+        }
+
+        function countdown() {
+            if (timeLeft === 0) {
+                clearInterval(timerId);
+                submitForm(); // Submit the form when the time runs out
+            } else {
+                document.getElementById("timer").textContent = timeLeft + "s";
+                timeLeft--;
+            }
+        }
+
+        function submitForm() {
+            clearInterval(timerId); // Stop the timer
+            document.getElementById("quizForm").submit(); // Submit the form
+        }
+    </script>
+</head>
+<body>
+    <h1>Quiz Questions</h1>
+
+    {% if questions %}
+        {% if not start %}
+            <h3>Instructions:</h3>
+            <p>Read each question carefully and select the correct answer. You have 30 seconds to answer each question. Click the "Start" button when you're ready to begin.</p>
+            <button onclick="startTimer(); document.getElementById('startBtn').style.display = 'none';">Start</button>
+        {% else %}
+            <form id="quizForm" action="/mark-quiz" method="POST">
+                {% for question in questions %}
+                    {% if loop.index == 1 %}
+                        <h3>Question {{ loop.index }}:</h3>
+                        <p>{{ question.question_text }}</p>
+                        <ul>
+                    {% endif %}
+                    
+                    {% if loop.index != 1 %}
+                        </ul>
+                        <h3>Question {{ loop.index }}:</h3>
+                        <p>{{ question.question_text }}</p>
+                        <ul>
+                    {% endif %}
+                     <input type="hidden" name="question_id" value="{{ question.question_id }}">
+                    <li>
+                        <input type="radio" name="answer_{{ question.question_id }}" value="A">
+                        {{ question.option_A }}
+                    </li>
+                    <li>
+                        <input type="radio" name="answer_{{ question.question_id }}" value="B">
+                        {{ question.option_B }}
+                    </li>
+                    <li>
+                        <input type="radio" name="answer_{{ question.question_id }}" value="C">
+                        {{ question.option_C }}
+                    </li>
+                    <li>
+                        <input type="radio" name="answer_{{ question.question_id }}" value="D">
+                        {{ question.option_D }}
+                    </li>
+                    
+                    {% if loop.last %}
+                        </ul>
+                        <div class="timer" id="timer">{{ timeLeft }}s</div>
+                    {% endif %}
+                {% endfor %}
+                
+                <button type="button" onclick="submitForm();">Submit Answers</button>
+            </form>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

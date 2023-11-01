@@ -38,6 +38,7 @@ class User(UserMixin, db.Model):
 
 class BaseQuestion(db.Model):
     __abstract__ = True
+    id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(255), nullable=False)
     option_A = db.Column(db.String(64), nullable=False)
     option_B = db.Column(db.String(64), nullable=False)

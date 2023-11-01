@@ -1,81 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Dashboard - Medical Quiz App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-        }
-        
-        .welcome-message {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .quiz-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .quiz-list li {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-        }
-        
-        .quiz-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .quiz-list li a {
-            color: #333;
-            text-decoration: none;
-            display: block;
-            padding: 10px;
-        }
-        
-        .quiz-list li a:hover {
-            background-color: #eee;
-        }
-        
-        .leaderboard {
-            margin-top: 30px;
-        }
-        
-        .leaderboard table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .leaderboard th,
-        .leaderboard td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .leaderboard th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-    </style>
-</head>
+{% extends 'main/index.html' %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='user_page.css') }}">
+{% endblock %}
+
+{% block content %}
 <body>
     <div class="header">
         <h1>User Dashboard</h1>
@@ -86,9 +16,9 @@
             <p>Here are the quizzes available:</p>
         </div>
         <ul class="quiz-list">
-            {% for quiz in quizzes %}
+            {% for quiz, link in quizzes.items() %}
             <li>
-                <a href="#">{{ quiz }}</a>
+                <a href="{{ link }}">{{ quiz }}</a>
             </li>
             {% endfor %}
         </ul>
@@ -115,4 +45,5 @@
         </div>
     </div>
 </body>
+{% endblock %}
 </html>
