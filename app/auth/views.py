@@ -30,7 +30,6 @@ def logout():
     for data in session_data:
         if session.get(data):
             del(session[data])
-    
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
 

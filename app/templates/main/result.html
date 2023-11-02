@@ -4,15 +4,38 @@
 <html>
 <head>
     <title>Quiz Results</title>
-    <style>
+    <link rel="stylesheet" href="../static/result.css">
+       <script>
+        function toggleAnalysis() {
+            var analysisDiv = document.getElementById("analysis");
+            if (analysisDiv.style.display === "none") {
+                analysisDiv.style.display = "block";
+            } else {
+                analysisDiv.style.display = "none";
+            }
+        }
+        window.addEventListener('pageshow', function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            // Redirect to the user dashboard page
+            const dashboardUrl = "{{ dashboard_url }}";
+            window.location.href = dashboardUrl;
+            }
+        });
         
-    </style>
+        window.addEventListener("popstate", function(event) {
+        // Redirect to the desired page
+        window.location.href = "{{ url_for('main.user') }}";
+        });
+        history.pushState({}, "");
+
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>Quiz Results</h1>
 
         <h2>Your Score: {{ percentage_score }}%</h2>
+        
 
 
         <p class="show-analysis" onclick="toggleAnalysis()">Show Analysis</p>
@@ -35,15 +58,6 @@
 
     </div>
 
-    <script>
-        function toggleAnalysis() {
-            var analysisDiv = document.getElementById("analysis");
-            if (analysisDiv.style.display === "none") {
-                analysisDiv.style.display = "block";
-            } else {
-                analysisDiv.style.display = "none";
-            }
-        }
-    </script>
+ 
 </body>
 </html>

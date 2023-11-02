@@ -76,7 +76,7 @@ def quiz(quiz):
 
         session['quiz_id'] = checker_list
         session['quiz_name'] = quiz
-        return render_template('main/quiz.html', questions=questions_list, quiz_id=quiz_id, start=False)
+        return render_template('main/quiz.html', questions=questions_list, quiz_id=quiz_id, start=False, quiz=quiz)
     
 @main.route('/user/result', methods=['GET', 'POST'])
 @login_required
@@ -94,11 +94,25 @@ def result():
     for question_id, chosen_answer in chosen_answers.items():
         if question_id in checker_list and chosen_answer == checker_list[question_id][1]:
             score += 1
+    score = 76.2  # Replace with the actual score value
+
+    score_remarks = {
+        (0, 12.5): "Keep going! Every step counts towards progress. You've got this!",
+        (12.6, 25): "Great effort! Stay determined and you'll see improvement in no time.",
+        (25.1, 37.5): "Well done! You're making strides forward. Keep up the good work!",
+        (37.6, 50): "Congratulations on your progress! Your hard work is paying off. Keep pushing yourself!",
+        (50.1, 62.5): "Fantastic job! You're getting closer to mastery. Keep up the excellent work!",
+        (62.6, 75): "Impressive work! You're doing great. Keep challenging yourself to reach new heights!",
+        (75.1, 87.5): "Outstanding performance! You're truly excelling in this area. Keep up the amazing work!",
+        (87.6, 100): "Incredible achievement! You're a true expert. Keep up the exceptional work and inspire others!"
+    }
+
+    remark = next((remark for (min_score, max_score), remark in score_remarks.items() if min_score <= score <= max_score), "Invalid score")
     
     total_questions = len(question_ids)
     percentage_score = (score / total_questions) * 100
     user_score = ScoreTable(user_id=user.id, score=percentage_score, quiz_name=session.get('quiz_name'))
     db.session.add(user_score)
     db.session.commit()
-    return render_template('main/result.html', questions=checker_list, chosen_answers=chosen_answers, percentage_score=percentage_score, )
+    return render_template('main/result.html', questions=checker_list, chosen_answers=chosen_answers, percentage_score=percentage_score)
     # return f'Quiz marked successfully. Your score: {percentage_score}%'

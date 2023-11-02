@@ -1,75 +1,11 @@
-<!-- random_questions.html -->
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Quiz Questions</title>
-    <style>
-        body {
-            background-color: #f2f2f2;
-            color: #333;
-            font-family: Arial, sans-serif;
-        }
-    
-        h1 {
-            text-align: center;
-        }
-
-        .quiz_id {
-            display: none;
-        }
-    
-        #startBtnContainer, #questionContainer {
-            background-color: #fff;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 5px;
-            text-align: left;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-        }
-    
-        #startBtn, #nextBtn, #submitBtn {
-            background-color: #4c79f;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-    
-        #startBtn:hover, #nextBtn:hover, #submitBtn:hover {
-            background-color: #3666a9;
-        }
-    
-        .question {
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-    
-        .timer {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            list-style-type: none;
-        }
-
-    
-        input[type="radio"] {
-            transform: scale(1.5);
-            margin-right: 10px;
-            margin-top: 20px;
-        }
-    
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="../static/quiz.css">
     <script>
-        var timeLeft = 30; // Time in seconds
+        var timeLeft = 20; // Time in seconds
         var timerId;
         var questionIndex = 0; // Index of the current question
 
@@ -88,7 +24,11 @@
         function countdown() {
             if (timeLeft === 0) {
                 clearInterval(timerId);
-                nextQuestion(); // Move to the next question when the time runs out
+                if (questionIndex === 19 ) {
+                    submitForm(); // Trigger the form submission if it's the last question
+                } else {
+                    nextQuestion(); // Move to the next question when the time runs out
+                }
             } else {
                 document.getElementById("timer").textContent = "Time Left: " + timeLeft + "s";
                 timeLeft--;
@@ -107,7 +47,7 @@
             clearInterval(timerId); // Stop the timer
             questionIndex++; // Move to the next question
             if (questionIndex < {{ questions|length }} ) {
-                timeLeft = 30; // Reset the timer for the next question
+                timeLeft = 20; // Reset the timer for the next question
                 displayQuestion(); // Display the next question
                 startTimer(); // Start the timer
             } else {
@@ -115,6 +55,7 @@
             }
         }
 
+        
         function showSubmitButton() {
             document.getElementById("nextBtn").style.display = "none"; // Hide the next button
             document.getElementById("submitBtn").style.display = "block"; // Show the submit button
@@ -122,17 +63,40 @@
 
         function submitForm() {
             clearInterval(timerId); // Stop the timer
-            document.getElementById("quizForm").submit(); // Submit the form
-        }
+            // Replace the current URL with the user dashboard page URL
+            var dashboardUrl = "{{ url_for('main.user') }}";
+            window.location.replace(dashboardUrl);
+            // Submit the form
+            document.getElementById("quizForm").submit();
+        } 
+
+        window.addEventListener("DOMContentLoaded", function() {
+            // Get all the question elements
+            var questionElements = document.querySelectorAll(".question");
+
+            // Loop through each question element and disable text selection and context menu
+            questionElements.forEach(function(questionElement) {
+                questionElement.classList.add("no-select");
+                questionElement.addEventListener("contextmenu", function(event) {
+                    event.preventDefault();
+                });
+            });
+        });
+        
     </script>
 </head>
 <body>
-    <h1>Quiz Questions</h1>
+    <h1 style="text-transform: capitalize;">{{ quiz }} Quiz </h1>
 
     {% if questions %}
         <div id="startBtnContainer">
             <h3>Instructions:</h3>
-            <p>Read each question carefully and select the correct answer. Each question will be displayed for 30 seconds. Click the "Start" button when you're ready to begin.</p>
+            <p><ul class="li-des" >
+                <li>Read each question carefully and select the correct answer</li> 
+                <li>Each question will be displayed for 20 seconds.</li>
+                </ul>
+                <br> Click the "Start" button when you're ready to begin.
+            </p>
             <button id="startBtn" onclick="startQuiz();">Start</button>
         </div>
     <form id="quizForm" method="post" action="{{ url_for('main.result', email=email) }}" onsubmit="submitForm()">
@@ -140,26 +104,26 @@
             <div class="timer" id="timer"></div>
 
             {% for question in questions %}
-                <div class="question" style="display: none;">
+                <div class="question no-select" style="display: none;">
                     <h3>Question {{ loop.index }}:</h3>
                     <p>{{ question.question_text }}</p>
                     <ul>
                         <input type="hidden" name="question_id" value="{{ question.question_id }}">
                         <li>
-                            <input type="radio" name="answer_{{ question.question_id }}" value="A">
-                            {{ question.option_A }}
+                            <input type="radio" id="answer_{{ question.question_id }}_A" name="answer_{{ question.question_id }}" value="A">
+                            <label for="answer_{{ question.question_id }}_A">{{ question.option_A }}</label>
                         </li>
                         <li>
-                            <input type="radio" name="answer_{{ question.question_id }}" value="B">
-                            {{ question.option_B }}
+                            <input type="radio" id="answer_{{ question.question_id }}_B" name="answer_{{ question.question_id }}" value="B">
+                            <label for="answer_{{ question.question_id }}_B">{{ question.option_B }}</label>
                         </li>
                         <li>
-                            <input type="radio" name="answer_{{ question.question_id }}" value="C">
-                            {{ question.option_C }}
+                            <input type="radio" id="answer_{{ question.question_id }}_C" name="answer_{{ question.question_id }}" value="C">
+                            <label for="answer_{{ question.question_id }}_C">{{ question.option_C }}</label>
                         </li>
                         <li>
-                            <input type="radio" name="answer_{{ question.question_id }}" value="D">
-                            {{ question.option_D }}
+                            <input type="radio" id="answer_{{ question.question_id }}_D" name="answer_{{ question.question_id }}" value="D">
+                            <label for="answer_{{ question.question_id }}_D">{{ question.option_D }}</label>
                         </li>
                     </ul>
                 </div>

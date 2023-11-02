@@ -52,9 +52,22 @@ h1 {
     display: none;
 }
 
-.show-analysis {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
-    margin-top: 10px;
+
+.show-analysis  {
+	background-color: #4070F4;
+	color: #FFFFFF;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 3px;
+	font-size: 16px;
+	cursor: pointer;
+	display: inline;
+    position: absolute;
+    
+    left: 50%;
+    transform: translate(-50%, 30%);
+}
+
+.show-analysis:hover {
+	background-color: #3059C9;
 }
