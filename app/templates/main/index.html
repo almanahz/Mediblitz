@@ -13,21 +13,20 @@
     {% block script %}
     <script></script>
     {% endblock %}
-   
+    
 </head>
 <body>
     <header>
     <nav>
         <div class="nav-bar">
             <i class='bx bx-menu sidebarOpen' ></i>
-            <box-icon  type="logo" name="facebook-square"></box-icon>
+            
             <span class="logo navLogo">{% block filler %}<a href="{{ url_for('main.index') }}"> Octamedic </a>{% endblock %}</span>
 
             <div class="menu">
                 <div class="logo-toggle">
                     <span class="logo"><a href="#">Octamedic </a></span>
                     <i class='bx bx-x siderbarClose'></i>
-                    <i class='bx bx-plus-medical bx-rotate-90' undefined ></i>
                 </div>
 
                 <ul class="nav-links">
@@ -47,13 +46,8 @@
 
                 <div class="searchBox">
                    <div class="searchToggle">
-                    <i class='bx bx-x cancel'></i>
-                    <i class='bx bx-search search'></i>
-                   </div>
-
+                    </div>
                     <div class="search-field">
-                        <input type="text" placeholder="Search...">
-                        <i class='bx bx-search'></i>
                     </div>
                 </div>
             </div>
@@ -73,62 +67,122 @@
     </header>
     
     {% block content %}
-    <section class="animation-section">
-        <h2 class="section-title">Innovation at the Intersection</h2>
-        <p class="section-description">OctaMedic thrives at the intersection of healthcare and technology. We harness the power of data analytics and machine learning to unlock valuable insights from medical data, empowering healthcare professionals to make informed decisions and optimize treatment plans. By embracing the potential of artificial intelligence, we aim to revolutionize personalized medicine, paving the way for more precise and tailored healthcare solutions.</p>
-        <div class="animation-container">
-          
-        </div>
-      </section>
-      {% endblock %}
+    <article>
+    <h1>The Intersection of Health and Technology: Transforming the Future of Healthcare</h1>
+    <div class="image-container">
+        <img src="static/images/MIT-Healthcare-Technology-01_0.jpg" alt="Healthcare Technology">
+    </div>
+    <p>
+        In recent years, the convergence of health and technology has revolutionized the healthcare industry, paving the way for transformative advancements and improved patient outcomes.
+        The integration of cutting-edge technologies into healthcare systems has ushered in an era of personalized medicine, remote patient monitoring, enhanced diagnostics, and streamlined healthcare delivery.
+        Let us explore the profound impact of this intersection and how it is shaping the future of healthcare.
+    </p>
 
+    <div class="section">
+        <h2 class="section-title">Enhanced Diagnostics</h2>
+        <p class="section-content">
+            One of the significant benefits of the intersection of health and technology is the development of advanced diagnostic tools.
+            From artificial intelligence (AI) algorithms capable of analyzing medical images and detecting anomalies with remarkable accuracy to wearable devices that monitor vital signs in real-time, technology has empowered healthcare professionals with unprecedented diagnostic capabilities.
+            These tools not only expedite the diagnosis process but also enhance accuracy, leading to early detection of diseases and more effective treatment plans.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Telemedicine and Remote Monitoring</h2>
+        <div class="image-container">
+            <img src="static/images/telemedicine.webp" alt="Healthcare Technology">
+        </div>
+        <p class="section-content">
+            Technology has bridged the gap between patients and healthcare providers, particularly through telemedicine and remote monitoring solutions.
+            Telemedicine enables patients to consult with healthcare professionals from the comfort of their homes, eliminating the need for physical visits and reducing healthcare costs.
+            Moreover, remote monitoring devices allow continuous tracking of patients' health parameters, such as blood pressure, glucose levels, and heart rate.
+            This real-time data empowers physicians to monitor patients' conditions remotely, provide timely interventions, and prevent complications.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Patient Empowerment</h2>
+        <p class="section-content">
+            The intersection of health and technology has shifted the dynamics of patient care, placing greater emphasis on patient empowerment.
+            With the advent of health-related mobile applications and wearable devices, individuals can actively participate in managing their health.
+            These tools provide access to personalized health information, fitness tracking, medication reminders, and health education resources.
+            By promoting self-care and preventive measures, technology empowers individuals to take control of their well-being, leading to improved health outcomes and reduced healthcare burdens.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Big Data and AI in Healthcare</h2>
+        <p class="section-content">
+            The abundance of health-related data generated daily has given rise to the use of big data analytics and AI in healthcare.
+            By analyzing vast amounts of patient data, such as electronic health records and clinical trial results, AI algorithms can identify patterns, predict disease progression, and facilitate personalized treatment plans.
+            Furthermore, AI-powered chatbots and virtual assistants enable patients to receive instant medical advice and support, enhancing access to healthcare services and reducing waiting times.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Challenges and Ethical Considerations</h2>
+        <p class="section-content">
+            While the intersection of health and technology brings immense opportunities, it also presents challenges and ethical considerations.
+            Privacy and data security, interoperability of systems, and ensuring equitable access to technology are crucial areas that require attention.
+            Striking a balance between technological advancements and maintaining the human touch in healthcare is another critical aspect to consider.
+        </p>
+    </div>
+
+    <p class="conclusion">
+        The intersection of health and technology has the potential to transform the future of healthcare, empowering patients, improving diagnostics, and revolutionizing healthcare delivery.
+        As technology continues to evolve, it is imperative for healthcare professionals, policymakers, and stakeholders to embrace these advancements responsibly, ensuring that patient-centered care and ethical considerations remain at the forefront.
+        By harnessing the power of technology, we can createa future where healthcare is more accessible, personalized, and effective, ultimately improving the well-being of individuals and communities worldwide.
+    </p>
+    </article>
+    <footer class="footer"><small>© 2023 Abdulqudus Abdulsalam</small></footer>
+    {% endblock %}
+</body>
+
+</html>
 <script>
 
-const body = document.querySelector("body"),
-      nav = document.querySelector("nav"),
-      modeToggle = document.querySelector(".dark-light"),
-      searchToggle = document.querySelector(".searchToggle"),
-      sidebarOpen = document.querySelector(".sidebarOpen"),
-      siderbarClose = document.querySelector(".siderbarClose");
-
-      let getMode = localStorage.getItem("mode");
-          if(getMode && getMode === "dark-mode"){
-            body.classList.add("dark");
-          }
-
-// js code to toggle dark and light mode
-      modeToggle.addEventListener("click" , () =>{
-        modeToggle.classList.toggle("active");
-        body.classList.toggle("dark");
-
-        // js code to keep user selected mode even page refresh or file reopen
-        if(!body.classList.contains("dark")){
-            localStorage.setItem("mode" , "light-mode");
-        }else{
-            localStorage.setItem("mode" , "dark-mode");
+    const body = document.querySelector("body"),
+          nav = document.querySelector("nav"),
+          modeToggle = document.querySelector(".dark-light"),
+          searchToggle = document.querySelector(".searchToggle"),
+          sidebarOpen = document.querySelector(".sidebarOpen"),
+          siderbarClose = document.querySelector(".siderbarClose");
+    
+          let getMode = localStorage.getItem("mode");
+              if(getMode && getMode === "dark-mode"){
+                body.classList.add("dark");
+              }
+    
+    // js code to toggle dark and light mode
+          modeToggle.addEventListener("click" , () =>{
+            modeToggle.classList.toggle("active");
+            body.classList.toggle("dark");
+    
+            // js code to keep user selected mode even page refresh or file reopen
+            if(!body.classList.contains("dark")){
+                localStorage.setItem("mode" , "light-mode");
+            }else{
+                localStorage.setItem("mode" , "dark-mode");
+            }
+          });
+    
+    // js code to toggle search box
+            searchToggle.addEventListener("click" , () =>{
+            searchToggle.classList.toggle("active");
+          });
+     
+          
+    //   js code to toggle sidebar
+    sidebarOpen.addEventListener("click" , () =>{
+        nav.classList.add("active");
+    });
+    
+    body.addEventListener("click" , e =>{
+        let clickedElm = e.target;
+    
+        if(!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")){
+            nav.classList.remove("active");
         }
-      });
-
-// js code to toggle search box
-        searchToggle.addEventListener("click" , () =>{
-        searchToggle.classList.toggle("active");
-      });
- 
-      
-//   js code to toggle sidebar
-sidebarOpen.addEventListener("click" , () =>{
-    nav.classList.add("active");
-});
-
-body.addEventListener("click" , e =>{
-    let clickedElm = e.target;
-
-    if(!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")){
-        nav.classList.remove("active");
-    }
-});
-
-</script>
-
-</body>
-</html>
+    });
+    
+    </script>

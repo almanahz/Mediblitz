@@ -23,6 +23,10 @@ body {
     margin-bottom: 30px;
 }
 
+.user_dash {
+    translate: 50%;
+}
+
 .quiz-list {
     list-style-type: none;
     padding: 0;
@@ -68,4 +72,17 @@ body {
 .leaderboard th {
     background-color: #f2f2f2;
     font-weight: bold;
+}
+
+.start-button {
+    margin-top: 30px;
+    padding: 5px 10px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #cc2c41;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    float: right;
 }

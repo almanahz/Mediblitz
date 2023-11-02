@@ -26,8 +26,8 @@
         }
     </script>
 {% endblock %}
-
 {% block content %}
+<body>
     <div class="container">
         <h3>MediBlitz Login</h3>
         <form action="/auth/login" method="POST" >
@@ -45,5 +45,8 @@
         <small><a>Don't have an Account? <a href="{{ url_for('auth.register') }}"> Click here</a></small>
     </div>
     
-{% endblock %}
+    
 
+    <footer><small>© 2023 Abdulqudus Abdulsalam</small></footer>
+</body>
+{% endblock %}

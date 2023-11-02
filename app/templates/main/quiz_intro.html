@@ -5,14 +5,21 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='quiz_intro.css') }}">
 {% endblock %}
 
-{% block content %}
+
 <body>
+    {% block content %}
     <div class="container">
         <div>
             <h1>Welcome to Mediblitz Quiz!</h1>
             <p>Mediblitz Quiz is a challenging and engaging quiz designed to evaluate your medical knowledge across various topics. Answer a series of carefully crafted questions and see how well you perform!</p>
-            <button class="start-button"><a href="{{ url_for('auth.register')}}">Start Quiz</a></button>
+            {% if logged_in %}
+            <a href="{{ url_for('main.user')}}"><button class="start-button">Start Quiz</button></a>
+            {% else %}
+            <a href="{{ url_for('auth.login')}}"><button class="start-button">Start Quiz</button></a>
+            {% endif %}
         </div>
     </div>
+    
+    {% endblock %}
+    
 </body>
-{% endblock %}

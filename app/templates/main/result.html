@@ -5,58 +5,45 @@
 <head>
     <title>Quiz Results</title>
     <style>
-        body {
-            background-color: #f1f1f1;
-            font-family: Arial, sans-serif;
-        }
         
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        
-        .question {
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f9f9f9;
-        }
-        
-        .question p {
-            margin: 0;
-        }
-        
-        .correct-answer {
-            color: green;
-        }
-        
-        .picked-answer {
-            color: red;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Quiz Results</h1>
-        
-        {% for question_id, question_text in questions.items() %}
-            <div class="question">
-                <p>{{ question_text }}</p>
-                <p class="correct-answer">Correct Answer: {{ correct_answers[question_id] }}</p>
-                <p class="picked-answer">Your Answer: {{ picked_answers[question_id] }}</p>
-            </div>
-        {% endfor %}
+
+        <h2>Your Score: {{ percentage_score }}%</h2>
+
+
+        <p class="show-analysis" onclick="toggleAnalysis()">Show Analysis</p>
+
+        <div id="analysis" class="analysis">
+            <h3>Question Analysis:</h3>
+
+            {% for question_id, question_text in questions.items() %}
+                <div class="question">
+                    <p>{{ question_text[0] }}</p>
+                    {% if chosen_answers[question_id] == question_text[1] %}
+                        <p class="picked-answer" style="color: green"><span class="tick">✓</span>Your Answer: {{ chosen_answers[question_id] }}</p>
+                    {% else %}
+                        <p class="picked-answer"><span class="cross">✗</span>Your Answer: {{ chosen_answers[question_id] }}</p>
+                        <p class="correct-answer">Correct Answer: {{ question_text[1] }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
     </div>
 
     <script>
-        // Your custom JavaScript code here
+        function toggleAnalysis() {
+            var analysisDiv = document.getElementById("analysis");
+            if (analysisDiv.style.display === "none") {
+                analysisDiv.style.display = "block";
+            } else {
+                analysisDiv.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>

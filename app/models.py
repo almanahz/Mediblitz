@@ -5,6 +5,9 @@ from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import login_manager
+from datetime import datetime
+from sqlalchemy import desc
+from sqlalchemy.orm import relationship
 
 
 class User(UserMixin, db.Model):
@@ -65,5 +68,21 @@ class BiochemistryQuestion(BaseQuestion):
 class MicrobiologyQuestion(BaseQuestion):
     __tablename__ = 'microbiology_questions'
 
+class ScoreTable(db.Model):
+    __tablename__ = 'scoretable'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    quiz_name = db.Column(db.String(64), nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user = relationship('User')
 
-
+    @staticmethod
+    def get_top_scores(quiz_name, limit=1):
+        top_scores = db.session.query(ScoreTable.score, User.first_name, User.other_names).\
+            join(User, ScoreTable.user_id == User.id).\
+            filter(ScoreTable.quiz_name == quiz_name).\
+            order_by(desc(ScoreTable.score)).\
+            limit(limit).\
+            all()
+        return top_scores

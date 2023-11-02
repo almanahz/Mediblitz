@@ -9,11 +9,11 @@
 
 
 <body>
-    {% block filler %} User Dashboard {% endblock %}
+    {% block filler %} <h1 class="user_page">User Dashboard </h1> {% endblock %}
     {% block content %}
     <div class="container">
         <div class="welcome-message">
-            <h2>Welcome, {{ email }}</h2>
+            <h2>Welcome, {{ first_name }}</h2>
             <p>Here are the quizzes available:</p>
         </div>
         <ul class="quiz-list">
@@ -27,23 +27,26 @@
             <h2>Leaderboard</h2>
             <table>
                 <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Username</th>
-                        <th>Score</th>
-                    </tr>
+                  <tr>
+                    <th>Name</th>
+                    <th>Score</th>
+                    <th>Category</th>                   
+                  </tr>
                 </thead>
                 <tbody>
-                    {% for rank, user in leaderboard %}
-                    <tr>
-                        <td>{{ rank }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.score }}</td>
-                    </tr>
+                  {% for quiz_name, scores in leaderboard.items() %}
+                    {% for score, name, other_name in scores %}
+                      <tr>
+                        <td>{{ name }} {{ other_name }}</td>
+                        <td>{{ score }}</td>
+                        <td style="text-transform: capitalize;">{{ quiz_name }}</td>                       
+                      </tr>
                     {% endfor %}
+                  {% endfor %}
                 </tbody>
-            </table>
+              </table>
         </div>
+        <a href="{{ url_for('auth.logout')}}"><button class="start-button">LogOut</button></a>
     </div>
     {% endblock %}
 </body>
