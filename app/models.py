@@ -49,9 +49,37 @@ class BaseQuestion(db.Model):
     option_D = db.Column(db.String(64), nullable=False)
     answer = db.Column(db.String(64), nullable=False)
 
+    
+    
+    def get_chosen_answer(self, option):
+        if option == 'A':
+            return self.option_A
+        elif option == 'B':
+            return self.option_B
+        elif option == 'C':
+            return self.option_C
+        elif option == 'D':
+            return self.option_D
+        else:
+            return None
+        
+
 
 class AnatomyQuestion(BaseQuestion):
     __tablename__ = 'anatomy_questions'
+    
+    def get_answer_text(self):
+
+        if self.answer == 'A':
+            return self.option_A
+        elif self.answer == 'B':
+            return self.option_B
+        elif self.answer == 'C':
+            return self.option_C
+        elif self.answer == 'D':
+            return self.option_D
+        else:
+            return None
 
 class PhysiologyQuestion(BaseQuestion):
     __tablename__ = 'physiology_questions'

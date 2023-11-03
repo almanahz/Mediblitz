@@ -5,7 +5,7 @@
 <head>
     <title>Quiz Results</title>
     <link rel="stylesheet" href="../static/result.css">
-       <script>
+    <script>
         function toggleAnalysis() {
             var analysisDiv = document.getElementById("analysis");
             if (analysisDiv.style.display === "none") {
@@ -34,23 +34,22 @@
     <div class="container">
         <h1>Quiz Results</h1>
 
-        <h2>Your Score: {{ percentage_score }}%</h2>
-        
-
-
+        <h2 class="score">Your Score: {{ percentage_score }}%</h2>
+        <p>{{ remark }}</p>
         <p class="show-analysis" onclick="toggleAnalysis()">Show Analysis</p>
 
         <div id="analysis" class="analysis">
+            <br> <br> <br> <br>
             <h3>Question Analysis:</h3>
 
-            {% for question_id, question_text in questions.items() %}
+            {% for question_id, question_text in correct_answers.items() %}
                 <div class="question">
                     <p>{{ question_text[0] }}</p>
-                    {% if chosen_answers[question_id] == question_text[1] %}
-                        <p class="picked-answer" style="color: green"><span class="tick">✓</span>Your Answer: {{ chosen_answers[question_id] }}</p>
+                    {% if chosen_answers[question_id][0] == question_text[1] %}
+                        <p class="picked-answer" style="color: green"><img class='mytick' src="{{ url_for('static', filename='images/checkmark-custom.svg') }}" alt="check"></i>Your Answer: {{ chosen_answers[question_id][0] }}</p>
                     {% else %}
-                        <p class="picked-answer"><span class="cross">✗</span>Your Answer: {{ chosen_answers[question_id] }}</p>
-                        <p class="correct-answer">Correct Answer: {{ question_text[1] }}</p>
+                        <p class="picked-answer"><img class='mytick' src="{{ url_for('static', filename='images/x-custom.svg') }}" alt="check">Your Answer: {{ chosen_answers[question_id][1] }}</p>
+                        <p class="correct-answer"> Correct Answer: {{ question_text[2] }}</p>
                     {% endif %}
                 </div>
             {% endfor %}

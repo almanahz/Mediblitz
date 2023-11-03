@@ -6,6 +6,7 @@ from .forms import NameForm
 from .. import db
 from ..models import User, AnatomyQuestion, PhysiologyQuestion, BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable
 from uuid import uuid4
+
 quiz_models = {
     'anatomy': AnatomyQuestion,
     'physiology': PhysiologyQuestion,
@@ -81,21 +82,40 @@ def quiz(quiz):
 @main.route('/user/result', methods=['GET', 'POST'])
 @login_required
 def result():
+    quiz_name = session.get('quiz_name')
     user = User.query.filter_by(id=session.get('user_id')).first()
+    
     question_ids = request.form.getlist('question_id')
+    
     chosen_answers = {}
+    correct_answers = {}
     for question_id in question_ids:
+        answer_dict = quiz_models[quiz_name].query.filter_by(id=question_id).first()
+        correct_answers[question_id] = (answer_dict.question, answer_dict.answer, answer_dict.get_answer_text())
         chosen_answer = request.form.get(f'answer_{question_id}')
-        chosen_answers[question_id] = chosen_answer
+        chosen_answers[question_id] = (chosen_answer, answer_dict.get_chosen_answer(chosen_answer))
+
     
     score = 0
-    checker_list = session.get('quiz_id')
+
+    # checker_list = session.get('quiz_id')
 
     for question_id, chosen_answer in chosen_answers.items():
-        if question_id in checker_list and chosen_answer == checker_list[question_id][1]:
+        if question_id in correct_answers and chosen_answer[0] == correct_answers[question_id][1]:
             score += 1
-    score = 76.2  # Replace with the actual score value
+   
+    total_questions = len(question_ids)
+    
+    try:
+        percentage_score = (score / total_questions) * 100
+    except:
+        return redirect(url_for('main.user'))
 
+    user_score = ScoreTable(user_id=user.id, score=percentage_score, quiz_name=session.get('quiz_name'))
+    db.session.add(user_score)
+    db.session.commit()
+
+    score = percentage_score
     score_remarks = {
         (0, 12.5): "Keep going! Every step counts towards progress. You've got this!",
         (12.6, 25): "Great effort! Stay determined and you'll see improvement in no time.",
@@ -109,10 +129,5 @@ def result():
 
     remark = next((remark for (min_score, max_score), remark in score_remarks.items() if min_score <= score <= max_score), "Invalid score")
     
-    total_questions = len(question_ids)
-    percentage_score = (score / total_questions) * 100
-    user_score = ScoreTable(user_id=user.id, score=percentage_score, quiz_name=session.get('quiz_name'))
-    db.session.add(user_score)
-    db.session.commit()
-    return render_template('main/result.html', questions=checker_list, chosen_answers=chosen_answers, percentage_score=percentage_score)
+    return render_template('main/result.html', correct_answers=correct_answers, chosen_answers=chosen_answers, percentage_score=percentage_score, remark=remark)
     # return f'Quiz marked successfully. Your score: {percentage_score}%'
