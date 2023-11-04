@@ -63,6 +63,18 @@ class BaseQuestion(db.Model):
         else:
             return None
         
+    def get_answer_text(self):
+        if self.answer == 'A':
+            return self.option_A
+        elif self.answer == 'B':
+            return self.option_B
+        elif self.answer == 'C':
+            return self.option_C
+        elif self.answer == 'D':
+            return self.option_D
+        else:
+            return None
+        
 
 
 class AnatomyQuestion(BaseQuestion):
@@ -83,18 +95,56 @@ class AnatomyQuestion(BaseQuestion):
 
 class PhysiologyQuestion(BaseQuestion):
     __tablename__ = 'physiology_questions'
+    def get_answer_text(self):
+        if self.answer == 'A':
+            return self.option_A
+        elif self.answer == 'B':
+            return self.option_B
+        elif self.answer == 'C':
+            return self.option_C
+        elif self.answer == 'D':
+            return self.option_D
+        else:
+            return 'No answer'
+
 
 class PharmacologyQuestion(BaseQuestion):
     __tablename__ = 'pharmacology_questions'
+    def get_answer_text(self):
+            if self.answer == 'A':
+                return self.option_A
+            elif self.answer == 'B':
+                return self.option_B
+            elif self.answer == 'C':
+                return self.option_C
+            elif self.answer == 'D':
+                return self.option_D
+            else:
+                return 'No answer'
 
 class GeneralQuestion(BaseQuestion):
     __tablename__ = 'general_questions'
+    def get_answer_text(self):
+        if self.answer == 'A':
+            return self.option_A
+        elif self.answer == 'B':
+            return self.option_B
+        elif self.answer == 'C':
+            return self.option_C
+        elif self.answer == 'D':
+            return self.option_D
+        else:
+            return 'No answer'
 
 class BiochemistryQuestion(BaseQuestion):
     __tablename__ = 'biochemistry_questions'
  
 class MicrobiologyQuestion(BaseQuestion):
     __tablename__ = 'microbiology_questions'
+
+class PathologyQuestion(BaseQuestion):
+    __tablename__ = 'pathology_questions'
+
 
 class ScoreTable(db.Model):
     __tablename__ = 'scoretable'

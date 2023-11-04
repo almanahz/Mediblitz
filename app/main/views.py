@@ -4,7 +4,7 @@ from flask_login import login_required
 from . import main
 from .forms import NameForm
 from .. import db
-from ..models import User, AnatomyQuestion, PhysiologyQuestion, BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable
+from ..models import User, AnatomyQuestion, PhysiologyQuestion, BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable, GeneralQuestion, PathologyQuestion
 from uuid import uuid4
 
 quiz_models = {
@@ -12,7 +12,9 @@ quiz_models = {
     'physiology': PhysiologyQuestion,
     'biochemistry': BiochemistryQuestion,
     'microbiology': MicrobiologyQuestion,
-    'pharmacology': PharmacologyQuestion
+    'pharmacology': PharmacologyQuestion,
+    'general': GeneralQuestion,
+    'pathology': PathologyQuestion
 }
 
 @main.route('/', methods=['GET', 'POST'])
@@ -41,7 +43,11 @@ def user():
 
     quizzes = {'Anatomy': url_for('main.quiz', quiz='anatomy'), 
                'Physiology': url_for('main.quiz', quiz='physiology'), 
-               'Biochemistry': url_for('main.quiz', quiz='biochemistry') 
+               'Biochemistry': url_for('main.quiz', quiz='biochemistry'),
+               'Pathology': url_for('main.quiz', quiz='pathology'),
+               'General': url_for('main.quiz', quiz='general'),
+               'Microbiology': url_for('main.quiz', quiz='microbiology'),
+               'Pharmacology': url_for('main.quiz', quiz='pharmacology')
                }
     
     quiz_names = ['anatomy', 'physiology', 'biochemistry', 'pharmacology', 'microbiology', 'general_questions']
