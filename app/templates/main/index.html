@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   {% block css %} 
+   
     <title>{% block title %} Octamedic {% endblock %}</title>
+    {% block css %} 
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     {% endblock %}
@@ -34,7 +35,7 @@
                     <li><a href="#">About</a></li>
                     <li><a href="{{ url_for( 'main.quiz_intro' )}}">Portfolio</a></li>
                     <li><a href="">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="{{ url_for( 'main.contact_page' )}}">Contact</a></li>
                 </ul>
             </div>
 

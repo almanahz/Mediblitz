@@ -15,14 +15,6 @@
                 alert("Passwords do not match");
                 return false;
             }
-            
-            var username = document.getElementById("username").value;
-            var usernameRegex = /^[A-Za-z][A-Za-z0-9_.]*$/;
-            var firstCharRegex = /^[A-Za-z]/;
-            if (!usernameRegex.test(username) || !firstCharRegex.test(username)) {
-                alert("Usernames must start with an alphabet and can only contain letters, numbers, dots, or underscores");
-                return false;
-            }
         }
     </script>
 {% endblock %}
@@ -40,10 +32,6 @@
             </div>
         
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
@@ -52,8 +40,8 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-group">
-                <label for="password2">Confirm Password</label>
-                <input type="password" id="password2" name="password2" required>
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
             </div>
             <div class="form-group">
                 <label>Gender:</label>
@@ -68,6 +56,7 @@
             </div>
             
             <button type="submit" name="submit">Register</button>
+            {{ form.csrf_token }}
         </form>
         <small><a>Already have an Account? <a href="{{ url_for('auth.login') }}"> Click here</a></small>
     </div>

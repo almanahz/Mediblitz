@@ -19,8 +19,11 @@ quiz_models = {
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    
     return render_template('main/index.html')
+
+@main.route('/contact_page', methods=['GET', 'POST'])
+def contact_page():
+    return render_template('main/contact_page.html')
 
 @main.route('/quiz_intro')
 def quiz_intro():

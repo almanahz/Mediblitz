@@ -36,16 +36,21 @@ def logout():
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+
     if request.method == 'POST':
-        user = User(first_name=form.first_name.data,
-                    other_names=form.other_names.data,
-                    email=form.email.data,
-                    username=form.username.data,
-                    password=form.password.data,
-                    gender=form.gender.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('You can now login.')
-        return redirect(url_for('auth.login'))
+        if form.validate_on_submit():
+            user = User(first_name=form.first_name.data,
+                        other_names=form.other_names.data,
+                        email=form.email.data,
+                        password=form.password.data,
+                        gender=form.gender.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('You can now login.')
+            return redirect(url_for('auth.login'))
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    return f"Error in field '{field}': {error}"
     return render_template('auth/registration.html', form=form)
 
