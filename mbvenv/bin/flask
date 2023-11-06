@@ -1,4 +1,4 @@
-#!/home/abdulqudus/ALX_PROJECTS/github/MediBlitz/mbvenv/bin/python3
+#!/home/ubuntu/Mediblitz/mbvenv2/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
