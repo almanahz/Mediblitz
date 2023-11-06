@@ -5,22 +5,8 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='registration.css') }}">
 {% endblock %}
 
-{% block script %}
-    <script>
-        function validateForm() {
-            var password = document.getElementById("password").value;
-            var confirm_password = document.getElementById("password2").value;
-
-            if (password !== confirm_password) {
-                alert("Passwords do not match");
-                return false;
-            }
-        }
-    </script>
-{% endblock %}
 
 {% block content %}
-<body>
     <div class="container">
         <h3>MediBlitz Registration</h3>
         <form id="registration-form" action="/auth/register" method="POST" onsubmit="return validateForm()" novalidate>
@@ -61,6 +47,25 @@
         <small><a>Already have an Account? <a href="{{ url_for('auth.login') }}"> Click here</a></small>
     </div>
     <footer><small>© 2023 Abdulqudus Abdulsalam</small></footer>
-</body>
-    
+
 {% endblock %}
+
+{% block script %}
+<script>
+    function validateForm() {
+        var password = document.getElementById("password").value;
+        var confirm_password = document.getElementById("confirm_password").value;
+
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters long");
+            return false;
+        }
+
+        if (password !== confirm_password) {
+            alert("Passwords do not match");
+            return false;
+        }
+    }
+</script>
+{% endblock %}
+

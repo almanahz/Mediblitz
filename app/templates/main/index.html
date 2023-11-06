@@ -11,9 +11,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     {% endblock %}
 
-    {% block script %}
-    <script></script>
-    {% endblock %}
+    
     
 </head>
 <body>
@@ -26,7 +24,7 @@
 
             <div class="menu">
                 <div class="logo-toggle">
-                    <span class="logo"><a href="#">Octamedic </a></span>
+                    <span class="logo"><a href="{{ url_for('main.index') }}">Octamedic </a></span>
                     <i class='bx bx-x siderbarClose'></i>
                 </div>
 
@@ -137,11 +135,8 @@
     </article>
     <footer class="footer"><small>© 2023 Abdulqudus Abdulsalam</small></footer>
     {% endblock %}
-</body>
-
-</html>
+{% block script %}
 <script>
-
     const body = document.querySelector("body"),
           nav = document.querySelector("nav"),
           modeToggle = document.querySelector(".dark-light"),
@@ -187,3 +182,6 @@
     });
     
     </script>
+{% endblock %}
+</body>
+</html>

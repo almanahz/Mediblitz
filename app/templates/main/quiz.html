@@ -3,87 +3,10 @@
 <html>
 <head>
     <title>Quiz Questions</title>
-    <link rel="stylesheet" href="../static/quiz.css">
-    <script>
-        var timeLeft = 20; // Time in seconds
-        var timerId;
-        var questionIndex = 0; // Index of the current question
+    {% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}">
+    {% endblock %}    
 
-        function startQuiz() {
-            document.getElementById('startBtn').style.display = 'none'; // Hide the start button
-            document.getElementById('startBtnContainer').style.display = 'none'; // Hide the instruction page
-            document.getElementById('questionContainer').style.display = 'block'; // Show the question container
-            displayQuestion(); // Display the first question
-            startTimer(); // Start the timer
-        }
-
-        function startTimer() {
-            timerId = setInterval(countdown, 1000);
-        }
-
-        function countdown() {
-            if (timeLeft === 0) {
-                clearInterval(timerId);
-                if (questionIndex === 19 ) {
-                    submitForm(); // Trigger the form submission if it's the last question
-                } else {
-                    nextQuestion(); // Move to the next question when the time runs out
-                }
-            } else {
-                document.getElementById("timer").textContent = "Time Left: " + timeLeft + "s";
-                timeLeft--;
-            }
-        }
-
-        function displayQuestion() {
-            var questions = document.getElementsByClassName("question");
-            for (var i = 0; i < questions.length; i++) {
-                questions[i].style.display = "none"; // Hide all questions
-            }
-            questions[questionIndex].style.display = "block"; // Show the current question
-        }
-
-        function nextQuestion() {
-            clearInterval(timerId); // Stop the timer
-            questionIndex++; // Move to the next question
-            if (questionIndex < {{ questions|length }} ) {
-                timeLeft = 20; // Reset the timer for the next question
-                displayQuestion(); // Display the next question
-                startTimer(); // Start the timer
-            } else {
-                showSubmitButton(); // Show the submit button if all questions have been answered
-            }
-        }
-
-        
-        function showSubmitButton() {
-            document.getElementById("nextBtn").style.display = "none"; // Hide the next button
-            document.getElementById("submitBtn").style.display = "block"; // Show the submit button
-        }
-
-        function submitForm() {
-            clearInterval(timerId); // Stop the timer
-            // Replace the current URL with the user dashboard page URL
-            var dashboardUrl = "{{ url_for('main.user') }}";
-            window.location.replace(dashboardUrl);
-            // Submit the form
-            document.getElementById("quizForm").submit();
-        } 
-
-        window.addEventListener("DOMContentLoaded", function() {
-            // Get all the question elements
-            var questionElements = document.querySelectorAll(".question");
-
-            // Loop through each question element and disable text selection and context menu
-            questionElements.forEach(function(questionElement) {
-                questionElement.classList.add("no-select");
-                questionElement.addEventListener("contextmenu", function(event) {
-                    event.preventDefault();
-                });
-            });
-        });
-        
-    </script>
 </head>
 <body>
     <h1 style="text-transform: capitalize;">{{ quiz }} Quiz </h1>
@@ -135,6 +58,89 @@
         <p class="quiz_id" name="quiz_id">{{ quiz_id }}</p>
     </form>
     {% endif %}
+    {% block script %}
+    <script>
+        var timeLeft = 20; // Time in seconds
+        var timerId;
+        var questionIndex = 0; // Index of the current question
     
+        function startQuiz() {
+            document.getElementById('startBtn').style.display = 'none'; // Hide the start button
+            document.getElementById('startBtnContainer').style.display = 'none'; // Hide the instruction page
+            document.getElementById('questionContainer').style.display = 'block'; // Show the question container
+            displayQuestion(); // Display the first question
+            startTimer(); // Start the timer
+        }
+    
+        function startTimer() {
+            timerId = setInterval(countdown, 1000);
+        }
+    
+        function countdown() {
+            if (timeLeft === 0) {
+                clearInterval(timerId);
+                if (questionIndex === 19 ) {
+                    submitForm(); // Trigger the form submission if it's the last question
+                } else {
+                    nextQuestion(); // Move to the next question when the time runs out
+                }
+            } else {
+                document.getElementById("timer").textContent = "Time Left: " + timeLeft + "s";
+                timeLeft--;
+            }
+        }
+    
+        function displayQuestion() {
+            var questions = document.getElementsByClassName("question");
+            for (var i = 0; i < questions.length; i++) {
+                questions[i].style.display = "none"; // Hide all questions
+            }
+            questions[questionIndex].style.display = "block"; // Show the current question
+        }
+    
+        function nextQuestion() {
+            clearInterval(timerId); // Stop the timer
+            questionIndex++; // Move to the next question
+            if (questionIndex < {{ questions|length }} ) {
+                timeLeft = 20; // Reset the timer for the next question
+                displayQuestion(); // Display the next question
+                startTimer(); // Start the timer
+            } else {
+                showSubmitButton(); // Show the submit button if all questions have been answered
+            }
+        }
+    
+        
+        function showSubmitButton() {
+            document.getElementById("nextBtn").style.display = "none"; // Hide the next button
+            document.getElementById("submitBtn").style.display = "block"; // Show the submit button
+        }
+    
+        function submitForm() {
+            clearInterval(timerId); // Stop the timer
+            // Replace the current URL with the user dashboard page URL
+            var dashboardUrl = "{{ url_for('main.user') }}";
+            window.location.replace(dashboardUrl);
+            // Submit the form
+            document.getElementById("quizForm").submit();
+        } 
+    
+        window.addEventListener("DOMContentLoaded", function() {
+            // Get all the question elements
+            var questionElements = document.querySelectorAll(".question");
+    
+            // Loop through each question element and disable text selection and context menu
+            questionElements.forEach(function(questionElement) {
+                questionElement.classList.add("no-select");
+                questionElement.addEventListener("contextmenu", function(event) {
+                    event.preventDefault();
+                });
+            });
+        });
+        
+    </script>
+    
+    {% endblock %}
 </body>
 </html>
+

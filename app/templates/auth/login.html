@@ -5,29 +5,8 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 {% endblock %}
 
-{% block script %}
-    <script>
-        function validateForm() {
-            var password = document.getElementById("password").value;
-            var confirm_password = document.getElementById("confirm_password").value;
-
-            if (password !== confirm_password) {
-                alert("Passwords do not match");
-                return false;
-            }
-            
-            var username = document.getElementById("username").value;
-            var usernameRegex = /^[A-Za-z][A-Za-z0-9_.]*$/;
-            var firstCharRegex = /^[A-Za-z]/;
-            if (!usernameRegex.test(username) || !firstCharRegex.test(username)) {
-                alert("Usernames must start with an alphabet and can only contain letters, numbers, dots, or underscores");
-                return false;
-            }
-        }
-    </script>
-{% endblock %}
-{% block content %}
 <body>
+    {% block content %}
     <div class="container">
         <h3>MediBlitz Login</h3>
         <form action="/auth/login" method="POST" >
@@ -48,5 +27,5 @@
     
 
     <footer><small>© 2023 Abdulqudus Abdulsalam</small></footer>
+    {% endblock %}
 </body>
-{% endblock %}
