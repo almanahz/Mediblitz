@@ -7,6 +7,7 @@ from flask import render_template
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
+
 @app.cli.command()
 def greet():
     print("Hello, I hope you doing great?")
@@ -24,7 +25,7 @@ def handle_error(error):
 @app.errorhandler(404)
 def handle_not_found_error(error):
     # Custom error handling logic for 404 Not Found
-    return render_template('404.html'), 404
+    return render_template('error/404.html'), 404
 
 
 

@@ -7,12 +7,10 @@ body {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
-    color: #333;
     text-align: center;
 }
 
@@ -21,6 +19,7 @@ h1 {
     padding: 10px;
     background-color: #dbdada;
     border-radius: 3px;
+    color: black;
 }
 
 .question p {
@@ -61,30 +60,6 @@ h1 {
     transform: translateY(20%);
 }
 
-.gg-check {
-    box-sizing: border-box;
-    
-    display: inline-block;
-    transform: scale(var(--ggs,1));
-    width: 22px;
-    height: 22px;
-    border: 2px solid transparent;
-    border-radius: 100px
-}
-.gg-check::after {
-    content: "";
-    display: inline;
-    box-sizing: border-box;
-    position: absolute;
-    left: 3px;
-    top: -1px;
-    width: 6px;
-    height: 10px;
-    border-width: 0 2px 2px 0;
-    border-style: solid;
-    transform-origin: bottom left;
-    transform: rotate(45deg)
-}
 
 
 .show-analysis  {

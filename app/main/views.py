@@ -1,11 +1,11 @@
-from datetime import datetime
-from flask import render_template, session, redirect, url_for, abort, jsonify, request, flash
+from flask import render_template, session, redirect, url_for, abort, request, flash, current_app
 from flask_login import login_required
 from . import main
-from .forms import NameForm
+from .forms import ContactUs
 from .. import db
 from ..models import User, AnatomyQuestion, PhysiologyQuestion, BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable, GeneralQuestion, PathologyQuestion
-from uuid import uuid4
+from flask_mail import Message
+from .. import mail
 
 quiz_models = {
     'anatomy': AnatomyQuestion,
@@ -21,9 +21,16 @@ quiz_models = {
 def index():
     return render_template('main/index.html')
 
-@main.route('/contact_page', methods=['GET', 'POST'])
+@main.route('/contact', methods=['GET', 'POST'])
 def contact_page():
-    return render_template('main/contact_page.html')
+    form = ContactUs()
+    if form.validate_on_submit():
+        msg = Message(current_app.config['FLASKY_MAIL_SUBJECT_PREFIX'] + 'hello',
+                    sender=current_app.config['FLASKY_MAIL_SENDER'], recipients=[current_app.config['MAIL_USERNAME']])
+        msg.body=str(form.message.data)
+        mail.send(msg)
+        flash("Your Message has been delivered, Thank You!")
+    return render_template('main/contact_page.html', form=form)
 
 @main.route('/quiz_intro')
 def quiz_intro():
@@ -39,6 +46,7 @@ def secret():
 @login_required
 def user():
     user = User.query.filter_by(id=session.get('user_id')).first()
+    verified = user.is_verified
     first_name = user.first_name
 
     if user is None:
@@ -53,18 +61,18 @@ def user():
                'Pharmacology': url_for('main.quiz', quiz='pharmacology')
                }
     
-    quiz_names = ['anatomy', 'physiology', 'biochemistry', 'pharmacology', 'microbiology', 'general_questions']
+    quiz_names = ['anatomy', 'physiology', 'biochemistry', 'pharmacology', 'microbiology', 'general', 'pathology']
 
     leaders = {}
     for quiz_name in quiz_names:
         leaders[quiz_name] = ScoreTable.get_top_scores(quiz_name)
-    
-    return render_template('main/user_page.html', first_name=first_name, quizzes=quizzes, leaderboard=leaders)
+    return render_template('main/user_page.html', first_name=first_name, quizzes=quizzes, \
+                           verified=verified, leaderboard=leaders)
 
 @main.route('/user/<quiz>', methods=['GET', 'POST'])
 @login_required
 def quiz(quiz):
-    quiz_id = str(uuid4())
+
     model = quiz_models.get(quiz)
     if model:
         result = model.query.order_by(db.func.rand()).limit(20).all()
@@ -84,9 +92,8 @@ def quiz(quiz):
 
             questions_list.append(question_dict)
 
-        session['quiz_id'] = checker_list
         session['quiz_name'] = quiz
-        return render_template('main/quiz.html', questions=questions_list, quiz_id=quiz_id, start=False, quiz=quiz)
+        return render_template('main/quiz.html', questions=questions_list, start=False, quiz=quiz)
     
 @main.route('/user/result', methods=['GET', 'POST'])
 @login_required
@@ -106,8 +113,6 @@ def result():
 
     
     score = 0
-
-    # checker_list = session.get('quiz_id')
 
     for question_id, chosen_answer in chosen_answers.items():
         if question_id in correct_answers and chosen_answer[0] == correct_answers[question_id][1]:
@@ -135,8 +140,11 @@ def result():
         (75.1, 87.5): "Outstanding performance! You're truly excelling in this area. Keep up the amazing work!",
         (87.6, 100): "Incredible achievement! You're a true expert. Keep up the exceptional work and inspire others!"
     }
+    remark = next((remark for (min_score, max_score), remark in score_remarks.items() \
+                   if min_score <= score <= max_score), "Invalid score")
 
-    remark = next((remark for (min_score, max_score), remark in score_remarks.items() if min_score <= score <= max_score), "Invalid score")
+    return render_template('main/result.html', correct_answers=correct_answers,\
+                           chosen_answers=chosen_answers,\
+                            percentage_score=percentage_score, remark=remark)
+
     
-    return render_template('main/result.html', correct_answers=correct_answers, chosen_answers=chosen_answers, percentage_score=percentage_score, remark=remark)
-    # return f'Quiz marked successfully. Your score: {percentage_score}%'

@@ -52,7 +52,10 @@
             </div>
         </div>
     </nav>
-    <div class="flash-messages">
+
+    
+    </header>
+    <div class="flash-messages" id="flash-messages">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul class="flash-messages-list">
@@ -63,8 +66,6 @@
             {% endif %}
         {% endwith %}
     </div>
-    </header>
-    
     {% block content %}
     <article>
     <h1>The Intersection of Health and Technology: Transforming the Future of Healthcare</h1>
@@ -168,7 +169,6 @@
           });
      
           
-    //   js code to toggle sidebar
     sidebarOpen.addEventListener("click" , () =>{
         nav.classList.add("active");
     });
@@ -180,7 +180,12 @@
             nav.classList.remove("active");
         }
     });
-    
+    setTimeout(function() {
+                var flashMessages = document.getElementById('flash-messages');
+                if (flashMessages) {
+                    flashMessages.remove();
+                }
+            }, 5000);
     </script>
 {% endblock %}
 </body>

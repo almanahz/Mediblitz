@@ -18,6 +18,8 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
+                <small><a>Forgotten Password? <a href="{{ url_for('auth.forgotten_password') }}"> Click here</a></small>
+
             </div>
             <button type="submit">Login</button>
         </form>
@@ -26,6 +28,6 @@
     
     
 
-    <footer><small>© 2023 Abdulqudus Abdulsalam</small></footer>
+    <footer><small>© 2023 Octamedic</small></footer>
     {% endblock %}
 </body>

@@ -8,18 +8,89 @@
 
 <body>
     {% block content %}
-    <div class="container">
-        <div>
-            <h1>Welcome to Mediblitz Quiz!</h1>
-            <p>Mediblitz Quiz is a challenging and engaging quiz designed to evaluate your medical knowledge across various topics. Answer a series of carefully crafted questions and see how well you perform!</p>
-            {% if logged_in %}
-            <a href="{{ url_for('main.user')}}"><button class="start-button">Start Quiz</button></a>
-            {% else %}
-            <a href="{{ url_for('auth.login')}}"><button class="start-button">Start Quiz</button></a>
-            {% endif %}
-        </div>
-    </div>
+    <h1>Medilitz Quiz App</h1>
+    <p class="myheader">Test your medical knowledge!</p>
+    <main>
+        <section class="hero">
+          <h2 >Challenge Yourself</h2>
+          <p class="myheader">Take quizzes on various medical topics and enhance your knowledge.</p>
+          <a href="{{ url_for('auth.login')}}" ><button class="btn start-btn">Start Quiz</button> </a>
+        </section>
     
-    {% endblock %}
+        <section class="features">
+          <div>
+          <div class="feature feature1">
+            <div class="image-frame">
+                <img src="{{ url_for('static', filename='images/dashboard.png') }}" alt="Medical Icon">
+            </div class='first-intro'>
+            <div class="text-frame">
+            <h3>Wide Range of Topics</h3>
+            <p>Explore quizzes on anatomy, diseases, medications, and more.</p>
+            </div>
+          </div>
+          <div class="feature feature2">
+            <div class="text-frame">
+              <h3>Timed Quizzes</h3>
+            <p>Challenge yourself with timed quizzes and improve your speed.</p>
+              </div>
+              <div class="image-frame">
+                <img src="{{ url_for('static', filename='images/anatomy_question.png') }}" alt="Medical Icon">
+            </div class='first-intro'>
+            </div>
     
+          <div class="feature feature3">
+            <div class="text-frame">
+              <h3>Compete and Compare</h3>
+              <p>Track your progress and compare scores with other participants.</p>
+            </div>
+            <div class="image-frame">
+              <img src="{{ url_for('static', filename='images/leaderboard.png') }}" alt="Medical Icon">
+            </div class='first-intro'>
+          </div>
+          </div>
+          <a style="display: block; text-decoration: none;" href="{{ url_for('auth.login')}}" ><button style="display: block; width: 100%;" class="btn start-btn">Start Quiz</button> </a>
+    
+        </section>
+      </main>
+    
+      <footer>
+        <p>&copy; 2023 Octamedic Quiz App. All rights reserved.</p>
+      </footer>
+   
+    {% block script %}
+    
+    {{ super() }}
+    <script>
+    function isElementInViewport(element) {
+        var rect = element.getBoundingClientRect();
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+      }
+      
+      // Function to add animation class to the features on scroll
+      function animateFeatures() {
+        var features = document.querySelectorAll('.feature');
+      
+        features.forEach(function (feature) {
+          if (isElementInViewport(feature)) {
+            feature.classList.add('animate');
+          }
+        });
+      }
+      
+      // Event listener for scroll event
+      window.addEventListener('scroll', function () {
+        animateFeatures();
+      });
+      
+      // Initial animation check on page load
+      animateFeatures();
+      {% endblock %}
+    </script>
+     {% endblock %}
+
 </body>

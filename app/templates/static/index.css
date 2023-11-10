@@ -65,6 +65,7 @@ body.dark{
     --side-nav: #242526;
     --text-color: #CCC;
     --search-bar: #242526;
+    color: wheat;
 }
 
 nav{
@@ -300,9 +301,21 @@ body.dark .search-field i{
     }
 
     .flash-messages{
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
+    .flash-success {
+        color:limegreen
+    }
+    .flash-fail {
+        color: red;
+    }
+
+    .flash-messages-list {
+        list-style-type: none;
+    }
     nav.active .nav-bar .navLogo a{
         opacity: 0;
         transition: all 0.3s ease;

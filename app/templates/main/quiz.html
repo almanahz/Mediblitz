@@ -1,14 +1,11 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Quiz Questions</title>
+{% extends 'main/index.html' %}
     {% block css %}
+    {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}">
     {% endblock %}    
 
-</head>
 <body>
+    {% block content %}
     <h1 style="text-transform: capitalize;">{{ quiz }} Quiz </h1>
 
     {% if questions %}
@@ -16,7 +13,7 @@
             <h3>Instructions:</h3>
             <p><ul class="li-des" >
                 <li>Read each question carefully and select the correct answer</li> 
-                <li>Each question will be displayed for 20 seconds.</li>
+                <li>Each question will be displayed for <strong> 20 seconds</strong></li>
                 </ul>
                 <br> Click the "Start" button when you're ready to begin.
             </p>
@@ -28,8 +25,8 @@
 
             {% for question in questions %}
                 <div class="question no-select" style="display: none;">
-                    <h3>Question {{ loop.index }}:</h3>
-                    <p>{{ question.question_text }}</p>
+                    <h3 class="question-no">Question {{ loop.index }}:</h3>
+                    <p class="question-question">{{ question.question_text }}</p>
                     <ul>
                         <input type="hidden" name="question_id" value="{{ question.question_id }}">
                         <li>
@@ -55,10 +52,11 @@
             <button type="button" id="nextBtn" onclick="nextQuestion();">Next</button>
             <button type="button" id="submitBtn" onclick="submitForm();" style="display: none;">Submit</button>
         </div>
-        <p class="quiz_id" name="quiz_id">{{ quiz_id }}</p>
     </form>
     {% endif %}
+    {% endblock %}
     {% block script %}
+    {{ super() }}
     <script>
         var timeLeft = 20; // Time in seconds
         var timerId;
@@ -142,5 +140,5 @@
     
     {% endblock %}
 </body>
-</html>
+
 

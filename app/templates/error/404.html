@@ -1,0 +1,13 @@
+{% extends './main/index.html' %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='error.css') }}">
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>Oops! Page Not Found</h1>
+    <p>We apologize, but the page you are looking for could not be found.</p>
+    <p>If you believe this is an error, please <a href="{{ url_for('main.contact_page') }}">contact us</a> and let us know.</p>
+  </div>
+  {% endblock %}

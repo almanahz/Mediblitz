@@ -1,8 +1,5 @@
 body {
-    background-color: #f2f2f2;
-    color: #333;
-    font-family: 'Poppins', sans-serif;
-    display: grid;
+    display: flex;
     place-items: center;
     font-size: large;
     width: 100%;
@@ -10,11 +7,9 @@ body {
 
 h1 {
     text-align: center;
+    font-size: large;
 }
 
-.quiz_id {
-    display: none;
-}
 
 .no-select {
     -webkit-user-select: none;
@@ -24,21 +19,22 @@ h1 {
 }
 
 #startBtnContainer, #questionContainer {
-    background-color: #fff;
     padding: 20px;
-    margin: 20px;
     border-radius: 5px;
     text-align: left;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    width: 70%;
+    min-width: 70%;
+    max-width: 92%;
     display: flex;
     text-align: justify;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-top: 2px solid #0963e0;
+    border-bottom: 2px solid #0963e0;
 }
 #startBtn, #nextBtn, #submitBtn {
-    background-color: #3d5980;
+    background-color: #4782d4;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -49,7 +45,7 @@ h1 {
     justify-content: center;
     align-items: center;
     float: right;
-    font-size: x-large;
+    font-size: medium;
     
 }
 
@@ -62,6 +58,7 @@ h1 {
 
 #nextBtn, #submitBtn{
     transform: translateY(-100%);
+    margin-top: 20px;
     font-size: 16px;
     background-color: #4070F4;;
 }
@@ -72,11 +69,35 @@ h1 {
 
 .question {
     margin-bottom: 20px;
+
+}
+
+.question-no {
+    margin-top: 10px;
+}
+
+
+.question-question {
+    border-bottom: 2px solid #0963e0;
+    background-color: beige;
+    margin-top: 10px;
+    padding: 10px;
+    color: black;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
 }
 
 .timer {
-    font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid rgb(238, 53, 40);
+    border-top: 2px solid rgb(238, 53, 40);
+    display: inline;
+    background-color: rgb(192, 207, 240);
+    padding: 5px;
+    border-radius: 7px;
+    font-size: medium;
+    color: black;
 }
 
 ul {
@@ -92,12 +113,15 @@ input[type="radio"] {
     transform: scale(1.5);
     margin-right: 10px;
     margin-top: 20px;
+    
 }
 
 
 input[type="radio"]:checked + label {
     background-color: #e0e0e0;
     font-weight: bold;
+    background-color: #9cc2f8;
+    border-radius: 6px;
 }
 label {
     display: inline-block;

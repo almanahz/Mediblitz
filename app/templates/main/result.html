@@ -2,6 +2,7 @@
 {% extends 'main/index.html' %}
 {% block title %} Quiz Results {% endblock %}
 {% block css %} 
+{{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <link rel="stylesheet" href="../static/result.css">
@@ -9,6 +10,7 @@
 {% endblock %}
 
 {% block script %}
+{{ super() }}
 <script>
     function toggleAnalysis() {
         var analysisDiv = document.getElementById("analysis");
@@ -50,9 +52,9 @@
 
             {% for question_id, question_text in correct_answers.items() %}
                 <div class="question">
-                    <p>{{ question_text[0] }}</p>
+                    <p>{{ loop.index }}. {{ question_text[0] }}</p>
                     {% if chosen_answers[question_id][0] == question_text[1] %}
-                        <p class="picked-answer" style="color: green"><img class='mytick' src="{{ url_for('static', filename='images/checkmark-custom.svg') }}" alt="check"></i>Your Answer: {{ chosen_answers[question_id][0] }}</p>
+                        <p class="picked-answer" style="color: green"><img class='mytick' src="{{ url_for('static', filename='images/checkmark-custom.svg') }}" alt="check"></i>Your Answer: {{ chosen_answers[question_id][1] }}</p>
                     {% else %}
                         <p class="picked-answer"><img class='mytick' src="{{ url_for('static', filename='images/x-custom.svg') }}" alt="check">Your Answer: {{ chosen_answers[question_id][1] }}</p>
                         <p class="correct-answer"> Correct Answer: {{ question_text[2] }}</p>

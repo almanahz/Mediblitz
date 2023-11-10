@@ -8,7 +8,8 @@ from . import login_manager
 from datetime import datetime
 from sqlalchemy import desc
 from sqlalchemy.orm import relationship
-
+from flask import current_app
+from itsdangerous import URLSafeTimedSerializer as Serializer
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -18,6 +19,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     gender=db.Column(db.Enum('male', 'female', 'other'))
+    is_verified = db.Column(db.Boolean, default=False)
 
     @property
     def password(self):
@@ -35,6 +37,25 @@ class User(UserMixin, db.Model):
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    def generate_confirmation_token(self, user_id, expiration='3600'):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': user_id})
+    
+    @staticmethod
+    def confirm(token):
+        s=Serializer(current_app.config['SECRET_KEY'], '3600')
+        try:
+            data = s.loads(token)
+            user_id = data.get('confirm')
+            user = User.query.get(user_id)
+        except:
+            return False
+        if user:
+            user.is_verified = True
+            db.session.commit()
+            return True
+        return False
+    
     def __repr__(self):
         return f"{self.username}"
 
@@ -79,62 +100,15 @@ class BaseQuestion(db.Model):
 class AnatomyQuestion(BaseQuestion):
     __tablename__ = 'anatomy_questions'
     
-    def get_answer_text(self):
-
-        if self.answer == 'A':
-            return self.option_A
-        elif self.answer == 'B':
-            return self.option_B
-        elif self.answer == 'C':
-            return self.option_C
-        elif self.answer == 'D':
-            return self.option_D
-        else:
-            return None
-
 class PhysiologyQuestion(BaseQuestion):
     __tablename__ = 'physiology_questions'
-    def get_answer_text(self):
-        if self.answer == 'A':
-            return self.option_A
-        elif self.answer == 'B':
-            return self.option_B
-        elif self.answer == 'C':
-            return self.option_C
-        elif self.answer == 'D':
-            return self.option_D
-        else:
-            return 'No answer'
-
-
+  
 class PharmacologyQuestion(BaseQuestion):
     __tablename__ = 'pharmacology_questions'
-    def get_answer_text(self):
-            if self.answer == 'A':
-                return self.option_A
-            elif self.answer == 'B':
-                return self.option_B
-            elif self.answer == 'C':
-                return self.option_C
-            elif self.answer == 'D':
-                return self.option_D
-            else:
-                return 'No answer'
 
 class GeneralQuestion(BaseQuestion):
     __tablename__ = 'general_questions'
-    def get_answer_text(self):
-        if self.answer == 'A':
-            return self.option_A
-        elif self.answer == 'B':
-            return self.option_B
-        elif self.answer == 'C':
-            return self.option_C
-        elif self.answer == 'D':
-            return self.option_D
-        else:
-            return 'No answer'
-
+ 
 class BiochemistryQuestion(BaseQuestion):
     __tablename__ = 'biochemistry_questions'
  
@@ -163,3 +137,11 @@ class ScoreTable(db.Model):
             limit(limit).\
             all()
         return top_scores
+    
+class TokenUsed(db.Model):
+    __tablename__ = 'tokens'
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(255), nullable=False)
+    is_used = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(),\
+                           nullable=False)
