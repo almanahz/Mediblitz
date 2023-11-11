@@ -32,6 +32,14 @@ def contact_page():
         flash("Your Message has been delivered, Thank You!")
     return render_template('main/contact_page.html', form=form)
 
+@main.route('/blog')
+def blog():
+    return render_template('error/construct.html')
+
+@main.route('/about')
+def about():
+    return render_template('error/construct.html')
+
 @main.route('/quiz_intro')
 def quiz_intro():
     logged_in = session.get('user_id')
