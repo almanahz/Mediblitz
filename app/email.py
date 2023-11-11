@@ -17,3 +17,8 @@ def send_mail(app, to, subject, template, **kwargs):
     # return thread
     mail.send(msg)
 
+        # else:
+        #     for field, errors in form.errors.items():
+        #         for error in errors:
+        #             return f"Error in field '{field}': {error}"
+

@@ -14,7 +14,11 @@
         <section class="hero">
           <h2 >Challenge Yourself</h2>
           <p class="myheader">Take quizzes on various medical topics and enhance your knowledge.</p>
+          {% if logged_in %}
+          <a href="{{ url_for('main.user')}}" ><button class="btn start-btn">Start Quiz</button> </a>
+          {% else %}
           <a href="{{ url_for('auth.login')}}" ><button class="btn start-btn">Start Quiz</button> </a>
+          {% endif %}
         </section>
     
         <section class="features">
@@ -48,8 +52,11 @@
             </div class='first-intro'>
           </div>
           </div>
+          {% if logged_in %}
+          <a style="display: block; text-decoration: none;" href="{{ url_for('main.user')}}" ><button style="display: block; width: 100%;" class="btn start-btn">Start Quiz</button> </a>
+          {% else %}
           <a style="display: block; text-decoration: none;" href="{{ url_for('auth.login')}}" ><button style="display: block; width: 100%;" class="btn start-btn">Start Quiz</button> </a>
-    
+          {% endif %}
         </section>
       </main>
     
