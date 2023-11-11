@@ -19,7 +19,7 @@ def make_shell_context():
 @app.errorhandler(Exception)
 def handle_error(error):
     # Custom error handling logic
-    return render_template('error.html', error=error), 500
+    return render_template('error/error.html', error=error), 500
 
 # Define error handler for specific HTTP status code
 @app.errorhandler(404)
