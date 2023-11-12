@@ -26,12 +26,10 @@ class RegistrationForm(FlaskForm):
     gender = RadioField('Gender', choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
                     validators=[DataRequired()])
         
-    def validate_email(self, field):
+    def email_validate(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered.')
-    def validate_username(self, field):
-        if User.query.filter_by(username=field.data).first():
-            raise ValidationError('Username already in use.')
+
         
 class Change_Password(FlaskForm):
     current_password = PasswordField('Current password', validators=[DataRequired()])
@@ -51,9 +49,5 @@ class Forgotten_Password_Update(FlaskForm):
     confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-class contact_us(FlaskForm):
-    name = StringField('First Name', validators=[DataRequired(), Length(1, 64)])
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
-    message = TextAreaField('Message')
-    submit = SubmitField('Submit')
+
 

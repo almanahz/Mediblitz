@@ -39,6 +39,12 @@ def register():
 
     if request.method == 'POST':
         if form.validate_on_submit():
+            try:
+                form.email_validate(form.email)
+            except:
+                heading = "Email already registered"
+                message = "Email has already been registered, kindly proceed to the login page to sign in"
+                return render_template('auth/status.html', message=message, heading=heading)
             user = User(first_name=form.first_name.data,
                         other_names=form.other_names.data,
                         email=form.email.data,
