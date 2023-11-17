@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.34, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.35, for Linux (x86_64)
 --
 -- Host: localhost    Database: mediblitz
 -- ------------------------------------------------------
--- Server version	8.0.34-0ubuntu0.20.04.1
+-- Server version	8.0.35-0ubuntu0.20.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -235,7 +235,7 @@ CREATE TABLE `scoretable` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `scoretable_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,6 +244,7 @@ CREATE TABLE `scoretable` (
 
 LOCK TABLES `scoretable` WRITE;
 /*!40000 ALTER TABLE `scoretable` DISABLE KEYS */;
+INSERT INTO `scoretable` VALUES (1,4,70,'biochemistry','2023-11-12 16:50:35'),(2,4,45,'anatomy','2023-11-12 16:58:49'),(3,4,65,'physiology','2023-11-12 17:04:49'),(4,12,60,'anatomy','2023-11-12 18:00:11'),(5,13,75,'anatomy','2023-11-12 18:03:44'),(6,13,55,'physiology','2023-11-12 18:10:31'),(7,13,55,'physiology','2023-11-12 18:10:31'),(8,13,80,'physiology','2023-11-12 20:03:26'),(9,15,80,'biochemistry','2023-11-12 20:45:19'),(10,16,65,'anatomy','2023-11-12 20:50:05'),(11,23,55,'anatomy','2023-11-13 14:58:11'),(12,23,85,'physiology','2023-11-13 15:05:07'),(13,24,30,'general','2023-11-13 15:45:55'),(14,23,75,'biochemistry','2023-11-13 16:45:09'),(15,23,50,'pharmacology','2023-11-13 16:52:08'),(16,1,5,'anatomy','2023-11-14 06:12:24'),(17,1,45,'pharmacology','2023-11-15 16:59:25');
 /*!40000 ALTER TABLE `scoretable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +261,7 @@ CREATE TABLE `tokens` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `is_used` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,6 +270,7 @@ CREATE TABLE `tokens` (
 
 LOCK TABLES `tokens` WRITE;
 /*!40000 ALTER TABLE `tokens` DISABLE KEYS */;
+INSERT INTO `tokens` VALUES (1,'eyJjb25maXJtIjoxfQ.ZU_9RA.dj4pGLgsVDjzrJaEpIaGUFIjSTc','2023-11-11 22:16:37',1);
 /*!40000 ALTER TABLE `tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,7 +291,7 @@ CREATE TABLE `users` (
   `is_verified` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,6 +300,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Abdulqudus','Abdulsalam','abdulqudus.a2@gmail.com','scrypt:32768:8:1$iBwFgBCW2FnH8Cxj$f74aa72330c92d4e38a1d52704410bc2bba26fc79b33f55eb0aad44bf532b73d62eb56accd787d0befa0b4b5f898f575f0e8884fd8da0e9a6a988eb58595a3de','male',1),(2,'Kabiru ','Hamisu ','kabiruhamisu121@gmail.com','scrypt:32768:8:1$QCwhP8g9bSWthp9t$3400a72b0c13f5a047d5e10524f3afb9b3587168133ee27e5e2f1d7dbe3f5cc696736c231d9e1962537058e44a6240fef895c5196b9d3af03e3039a4141ff5de','male',0),(3,'Aminu','Suraj ibrahim','surajaminu773@gmail.com','scrypt:32768:8:1$mZuT5TjrXRWYdkYv$04056300fcdfa5feb87753a6f81714d0d93362ef9b799bd875347fa00efa44c8884e0f2623a70e698343bbc293e54c14d1970d6f04658b724127df1bae4cf3ae','male',0),(4,'Abdulazeez ','Fauziyyah ','fazey16@gmail.com','scrypt:32768:8:1$pgaloWdOdg1o9A5J$04ee0df44195095d67b551b43c89262bd1d3cedcfe432b5eb6c2aff2bcda9ce05d8051cc838a3bc5a65aa27ff44ebd8c40d5d0a949328771ddc5ed2191cb8a66','female',0),(5,'Aliyu Kehinde','Boladale','akboladale@gmail.com','scrypt:32768:8:1$IhllURFr7v7xcCNw$5ee6e90484b8d3ce92d37a11d63fe41ddb40ea4822bd193ef55ded85d3e924d667afc5c6434625807ee2f92581f74a757c105c53710fe7009a2e8aba16f12fe1','male',0),(6,'Hassan','Ali','hassanali@gmail.com','scrypt:32768:8:1$2p7Z2qjFIMeOT6TW$aaed2e8414cba1c0a102687cf4b45ffc19a1f0061af59b592ed0733a9b41a521585f2830ee0f2ae2e828a88e0c877433dfbeca2af7410b9f642b8fa601bc4769','male',0),(7,'Saadu','Mansur','saadmansurbello@gmail.com','scrypt:32768:8:1$qe9abS5DwcIP38gR$0349714b1fa25f54fbf364de8540e700da595cd94ae504ee7c09cd49e0f7447310d35e5a62a8425ac68b6441aff56b277a4e4ecf514774963a2b4917658fc6e0','male',0),(8,'Abdulqudus','Abdulsalam','hassanaali@gmail.com','scrypt:32768:8:1$QWtrFej3d1jxbcEp$fb3c4b8bed7e1c373fb0e389708486b0bcde0af93f7aaa7c724770f733ed1287f52e497ff24157a4affa31295cdcc53027538cabab588a601dc2d286450f8f43','male',0),(9,'Abdulqudus','ABdulsalam','abdulqudus.a@gmail.com','scrypt:32768:8:1$9J4BxfhVXDVEJbJE$31f6655b951f1f2ca712fd975eec995532e1e15bec3fdc67301e92b720cc3fc467f68a05617ca1904493242bedf40d671d305fb8e47219fdd4b706dd77af6c6a','male',0),(10,'Abdulqudus','Abdulsalam','abdulsalam123@gmail.com','scrypt:32768:8:1$YSIIB9a4ndGQvtPe$f9dd3dc45ea9f424080091f853bf17f09b17e9ffcab3804fba7a5da517f9c041bd3ea135dd4d826a370aa49ece63f47f9201ac5712f91caa7b4d8e08c035f52b','male',0),(11,'Abdulqudus','Abdulsalam','abdulsalam1123@gmail.com','scrypt:32768:8:1$adv2NWy6rvH50cd7$defa5e87c086b79fcc8bc5dbcae53529a0c3a715e943ef2e474eac8eaa69d8a4cdb20f5d201d0874f861a957f675d8cce525055674c94901b92629117684885c','male',0),(12,'Uthman','Yayi','agbolahandhunurayne@gmail.com','scrypt:32768:8:1$gqO7G8zUf51Tx6Yv$205cca4f7bc1d00235a4d50e33d8f37c6ae9d2845cf5e86bcfa0389798635292da835c73ba878a80794bc4520e2960da21d6eb48de523cf72b845c6c61fde3f7','male',0),(13,'Kasheem','Udu','kasheemsuleiman5@gmail.com','scrypt:32768:8:1$Lqa0NLAbYbg6wCWQ$6f39ffb78eb85d012b35372a4a10985e5ea8d7588e2fb3667b8cfc42930f02e658a80dc29b62a27df0f8693828e0f92848b0e18d26a9ef9c22ca1735f99038b2','male',0),(14,'John ','Hassan ','drhassanilyas@gmail.com','scrypt:32768:8:1$u0nDv9iM3q8EGZj7$d07b6681a59e3d7490994a488a66154a8b8782cd931b540c3169e11009bedd6ebef8dd82b532e0b0fe82956fe93a1e3d5d5da10bd97f3fd09eb9b1ee588b0bdb','male',0),(15,'Adamu','Sulaiman','assuleimanadamu01@gmail.com','scrypt:32768:8:1$DOAjufccgOqAlFsH$06249f811db67431ec7e3cf666a86fc760081afa51da5e7d86d1bb3176168ffdcfcd417f847d8a487096eebd89e34e858100da20f34405a1c1f1ef94725ce572','male',0),(16,'Muhammad','Nazi','nyusuf964@gmail.com','scrypt:32768:8:1$hsankwxJKNBOjPbp$37e19adca4afbc3b3169472008b5dfa43b91186da8d7d5061c49b2691e553cf238c1893a36a9cf5098c3f7746e1fc5472f49c440bc500f7c0b35725bb9c48f63','male',0),(17,'Abdulrahman ','Rufai','abdulrahmanurufaiadamgungura@gmail.com','scrypt:32768:8:1$HjyqyzHKPZwyeAiB$eeaacbad73b5cab11973881cd1b268c8581050f65b029dce95a61a825cf172741a48f315b9160ad5379df77490c9d5d03ab3716df276628bf4d39140b1a7e3c2','male',0),(18,'Mukhtar ','Muhammad Hamza ','mukhtarmuhammadhamza@gmail.com','scrypt:32768:8:1$uGc0d1SEHOqDFviD$34e2b66258465c9045bef05cbabcfb14767dfdc89160d1efb6d5864dbbc556087223d090549f2b0ecc001a854d4518d5fed7818524a64b3ed7c1387cb2badecc','male',0),(19,'Nuhu','Adinoyi ','smartxheey@gmail.com','scrypt:32768:8:1$ElNbnQglVHqtn59l$d1d97c507cefa4c0d052ecb090d5c48366b58a7548ff9fbf25fbdb303f0c61b24d25227ebcf8dfc94d3ea377ba10b0f12b72444c38dd0bc3e415f451b3f9ba45','male',0),(20,'Abdulqudus','Abdulsalam','abdul.qudus.a2@gmail.com','scrypt:32768:8:1$wORpYdnWttjEj0Uv$aa3840ef7033ea75624b36ca65d1ffbed59761558b0768b2927722492e13b6257bb322e76b300f5add63f6330d29b51d2d9085d7006cc2cc1a0780f4e130317f','male',0),(21,'Saidat','Ismael','ismailsaidat2018@gmail.com','scrypt:32768:8:1$mKZqIh7EsgkgH2Z4$3e1381f31bcc5f28a48d27323003a73baa9f215c24bafc8b9c72f92499238eccc13a77bc1c444b22280e343de55068117abc33b651d028b745c2dc94798180e6','female',0),(22,'Abdulhamid','Ali Muhammad','abdulhamidalimaiwake@gmail.com','scrypt:32768:8:1$TA0tMPxCOreRPB0r$781ea5a1fb724074356400f539f424f06cf70ad141023f00c4472cc166e91f0cc7e147aeccbd9304e114bbad9f4e3b3a96ae3516a66fed98a75090435b2062a5','female',0),(23,'Nafisah ','Abdulraheem ','nafisahabdul66@gmail.com','scrypt:32768:8:1$pXFOiWvIBZKZK4SP$c1ae3f8edbdb88466136587728ab7eebf4cbd6fe51f28a3a3cd76c98c798bce5d042b748c587c03db35846fcb5fdc0d377f454bce3261abfe9defa08c08606e7','female',0),(24,'Suhair ','Sue','suhairdama@gmail.com','scrypt:32768:8:1$kS3TgG4hwKS0HeDa$f09dedcdf2d1a4446d81fb9cdaa0c6ba535c74aa3d03c21224011fc15e1063608a327259aba9175f3f6b7999f2e5a6dbf7f90db22dd3b75360d522f41beae4f3','female',0),(25,'Makanjuola ','Abdulwasiu Aderounmu ','makanjuolaabdulwasiua@gmail.com','scrypt:32768:8:1$KKSSOGYLUkNLedeG$89621b3d7d8f0e5f004c4f50470eb570ad08f9120302a4ee68678a0728e25b48739376bbeda1c0c8e5ba436c7d153acfa7f86d740ff779bec4bddd96542117ce','male',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -310,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-11 21:53:16
+-- Dump completed on 2023-11-17 18:55:05
