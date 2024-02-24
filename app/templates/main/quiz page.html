@@ -1,0 +1,80 @@
+{% extends 'main/index.html' %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='user_page.css') }}">
+{% endblock %}
+
+<body>
+    {% block filler %} <h1 class="user_page">User Dashboard </h1> {% endblock %}
+    {% block content %}
+    <div class="container">
+      <div class="set-div">
+        <button class="set-but" onclick="settoggleMenu()"><img class="set-logo" src="{{ url_for('static', filename='images/icons8-settings-50.png') }}" onclick="settoggleMenu()">Settings</button>
+        <div id="settingsMenu" class="set-menu">
+          {% if verified %}
+          <small> Account Status:</small><span class="ver"> Verified </span><img class="ver-img" src="{{ url_for('static', filename='images/checked.png') }}"> </a>
+          {% else %}
+          <a href="{{ url_for('auth.verification') }}"><small> Account Status:</small><span class="unver">Unverified</span><img class="ver-img" src="{{ url_for('static', filename='images/unchecked.png') }}"></a>
+          {% endif %}
+          <a href="{{ url_for('auth.change_password') }}"><small>Change Password</small></a>
+        </div>
+        </div>
+        <div class="welcome-message">
+            <h2>Welcome, {{ first_name }}</h2>
+            <p>Here are the quizzes available:</p>
+        </div>
+        <ul class="quiz-list">
+            {% for quiz, link in quizzes.items() %}
+            <li>
+                <a href="{{ link }}">{{ quiz }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="leaderboard">
+            <h2>Leaderboard</h2>
+            <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Score</th>
+                    <th>Category</th>                   
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for quiz_name, scores in leaderboard.items() %}
+                    {% for score, name, other_name in scores %}
+                      <tr>
+                        <td>{{ name }} {{ other_name }}</td>
+                        <td>{{ score }}</td>
+                        <td style="text-transform: capitalize;">{{ quiz_name }}</td>                       
+                      </tr>
+                    {% endfor %}
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+        <a href="{{ url_for('auth.logout')}}"><button class="start-button">LogOut</button></a>
+    </div>
+    {% endblock %}
+    {% block script %}
+    {{ super() }}
+    <script>
+      function settoggleMenu() {
+        var menu = document.getElementById("settingsMenu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+      }
+      
+      document.addEventListener("click", function(event) {
+      var menu = document.getElementById("settingsMenu");
+      var button = document.querySelector(".set-but");
+
+      if (event.target !== menu && event.target !== button) {
+        menu.style.display = "none";
+      }
+    });
+    </script>
+    {% endblock %}
+</body>
+
+</html>
