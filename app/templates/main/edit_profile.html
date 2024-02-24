@@ -1,0 +1,130 @@
+{% extends 'main/index.html' %}
+
+{% block content %}
+<style>
+    .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-control {
+    width: 80%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-left: 20px;
+
+  }
+
+  .container {
+    width: 70%;
+    margin: auto;
+    background-color: rgb(238, 236, 234);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 100px;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  h2 {
+    margin-top: 0;
+  }
+</style>
+  <h2>Edit Profile</h2>
+  <form class="container" method="POST" action="{{ url_for('main.edit_profile') }}">
+    {{ form.hidden_tag() }}
+<div>
+    <div class="form-group">
+      <h4>{{ form.first_name.label }} </h4>
+      {{ form.first_name(class="form-control") }}
+    </div>
+    <div>
+      <h4>{{ form.other_names.label }}</h4>
+      {{ form.other_names(class="form-control") }}
+    </div>
+</div>
+    <div class="form-group">
+      <h4>{{ form.location.label }} </h4>
+      {{ form.location(class="form-control") }}
+    </div>
+    <div class="form-group">
+      <h4>{{ form.about_me.label }} </h4>
+      {{ form.about_me(class="form-control", rows=5) }}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+  </form>
+
+  <h3>Update Password</h3>
+  <form class='container pass_form form-control' action="/auth/user/change_password" method="POST" >
+  
+    <div class="form-group">
+        <h4><label for="current_password">Current Password</label></h4>
+        <input type="password" id="current_password" name="current_password" required>
+    </div>
+    <div class="form-group">
+        <h4><label for="new_password">New Password</label></h4>
+        <input type="password" id="new_password" name="new_password" required>
+    </div>
+    <div class="form-group">
+        <h4><label for="confirm_new_password">Confirm New Password</label></h4>
+        <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+    </div>
+    <button type="submit">Submit</button>
+    
+</form>
+{% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+var form = document.getElementsByClassName('pass_form');
+var currentPasswordInput = document.getElementById('current_password');
+var newPasswordInput = document.getElementById('new_password');
+var confirmNewPasswordInput = document.getElementById('confirm_new_password');
+var submitButton = document.querySelector('button[type="submit"]');
+
+function validatePassword() {
+var currentPassword = currentPasswordInput.value;
+var newPassword = newPasswordInput.value;
+var confirmNewPassword = confirmNewPasswordInput.value;
+
+if (newPassword !== confirmNewPassword) {
+  confirmNewPasswordInput.setCustomValidity('Passwords do not match');
+} else {
+  confirmNewPasswordInput.setCustomValidity('');
+}
+
+if (newPassword.length < 6) {
+  newPasswordInput.setCustomValidity('Password must be at least 6 characters long');
+} else {
+  newPasswordInput.setCustomValidity('');
+}
+}
+
+currentPasswordInput.addEventListener('input', validatePassword);
+newPasswordInput.addEventListener('input', validatePassword);
+confirmNewPasswordInput.addEventListener('input', validatePassword);
+
+form.addEventListener('submit', function(event) {
+validatePassword();
+
+if (!form.checkValidity()) {
+  event.preventDefault();
+}
+});
+});
+</script>

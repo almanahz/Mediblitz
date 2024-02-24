@@ -16,16 +16,16 @@ def greet():
 def make_shell_context():
     return dict(app=app, db=db, User=User)
 
-@app.errorhandler(Exception)
-def handle_error(error):
-    # Custom error handling logic
-    return render_template('error/error.html', error=error), 500
+# @app.errorhandler(Exception)
+# def handle_error(error):
+#     # Custom error handling logic
+#     return render_template('error/error.html', error=error), 500
 
-# Define error handler for specific HTTP status code
-@app.errorhandler(404)
-def handle_not_found_error(error):
-    # Custom error handling logic for 404 Not Found
-    return render_template('error/404.html'), 404
+# # Define error handler for specific HTTP status code
+# @app.errorhandler(404)
+# def handle_not_found_error(error):
+#     # Custom error handling logic for 404 Not Found
+#     return render_template('error/404.html'), 404
 
 
 

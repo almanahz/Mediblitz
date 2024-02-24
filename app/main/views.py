@@ -1,11 +1,15 @@
 from flask import render_template, session, redirect, url_for, abort, request, flash, current_app
-from flask_login import login_required
+from flask_login import login_required, current_user
 from . import main
-from .forms import ContactUs
+from .forms import ContactUs, EditProfileForm, PostForm
 from .. import db
-from ..models import User, AnatomyQuestion, PhysiologyQuestion, BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable, GeneralQuestion, PathologyQuestion
+from ..models import User, AnatomyQuestion, PhysiologyQuestion,\
+    BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable, GeneralQuestion, PathologyQuestion, Post, Permission
 from flask_mail import Message
 from .. import mail
+import os
+import random
+
 
 quiz_models = {
     'anatomy': AnatomyQuestion,
@@ -32,13 +36,33 @@ def contact_page():
         flash("Your Message has been delivered, Thank You!")
     return render_template('main/contact_page.html', form=form)
 
-@main.route('/blog')
-def blog():
-    return render_template('error/construct.html')
+# @main.route('/blog')
+# def blog():
+#     return render_template('error/construct.html')
 
 @main.route('/about')
 def about():
     return render_template('error/construct.html')
+
+@main.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(id=session.get('user_id')).first()
+        user.first_name = form.first_name.data
+        user.other_names = form.other_names.data
+        user.location = form.location.data
+        user.about_me = form.about_me.data
+        db.session.add(user)
+        db.session.commit()
+        flash('Your profile has been updated.')
+        return redirect(url_for('main.user'))
+    form.first_name.data = current_user.first_name
+    form.other_names.data = current_user.other_names
+    form.location.data = current_user.location
+    form.about_me.data = current_user.about_me
+    return render_template('main/edit_profile.html', form=form)
 
 @main.route('/quiz_intro')
 def quiz_intro():
@@ -50,16 +74,23 @@ def quiz_intro():
 def secret():
     return 'You are authorized to access this page'
 
-@main.route('/user', methods=['GET', 'POST'])
-@login_required
+@main.route('/user')
 def user():
+    user = User.query.filter_by(id=session.get('user_id')).first()
+    if user is None:
+        abort(404)
+    return render_template('main/user_page.html', user=user)
+
+@main.route('/user_quiz', methods=['GET', 'POST'])
+@login_required
+def user_quiz():
     user = User.query.filter_by(id=session.get('user_id')).first()
     verified = user.is_verified
     first_name = user.first_name
-
+    
     if user is None:
         abort(404)
-
+    
     quizzes = {'Anatomy': url_for('main.quiz', quiz='anatomy'), 
                'Physiology': url_for('main.quiz', quiz='physiology'), 
                'Biochemistry': url_for('main.quiz', quiz='biochemistry'),
@@ -74,8 +105,8 @@ def user():
     leaders = {}
     for quiz_name in quiz_names:
         leaders[quiz_name] = ScoreTable.get_top_scores(quiz_name)
-    return render_template('main/user_page.html', first_name=first_name, quizzes=quizzes, \
-                           verified=verified, leaderboard=leaders)
+    return render_template('main/quiz page.html', first_name=first_name, quizzes=quizzes, \
+                           verified=verified, leaderboard=leaders, user=user)
 
 @main.route('/user/<quiz>', methods=['GET', 'POST'])
 @login_required
@@ -156,3 +187,34 @@ def result():
                             percentage_score=percentage_score, remark=remark)
 
     
+@main.route('/blog', methods=['GET', 'POST'])
+def blog():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    random.shuffle(posts)
+    selected_posts = posts[:6]
+    return render_template('main/blog_post.html', posts=posts, selected_posts=selected_posts)
+
+@login_required
+@main.route('/create_blog', methods=['GET', 'POST'])
+def create_blog():
+    form = PostForm()
+    save_dir = '/home/abdulqudus/ALX_PROJECTS/github/Mediblitz/app/templates/static/user_images'
+    if(request.method == 'POST'):
+        image = request.files['image']
+        post = Post(body=request.form.get('body'),
+                    author=current_user._get_current_object(),
+                    category=form.category.data,
+                    headline=form.title.data,
+                    image_path=image.filename)
+        db.session.add(post)
+        image.save(os.path.join(save_dir, image.filename))
+        db.session.commit()
+        flash('Post Successfully submitted')
+        return redirect(url_for('main.create_blog'))
+    return render_template('main/blog_entry.html', form=form, save_dir=save_dir)
+
+
+@main.route('/blog/<id>/', methods=['GET', 'POST'])
+def blog_id(id):
+    post = Post.query.filter_by(id=id).first()
+    return render_template('main/post.html', post=post)

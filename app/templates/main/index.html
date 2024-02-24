@@ -31,7 +31,11 @@
                 <ul class="nav-links">
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
                     <li><a href="{{ url_for('main.about') }}">About</a></li>
-                    <li><a href="{{ url_for( 'main.quiz_intro') }}">Portfolio</a></li>
+                    {% if not current_user.is_authenticated %}
+                    <li><a href="{{ url_for( 'auth.login') }}">Login or Register</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for( 'main.user') }}">Dashboard</a></li>
+                    {% endif %}
                     <li><a href="{{ url_for('main.blog') }}">Blog</a></li>
                     <li><a href="{{ url_for( 'main.contact_page') }}">Contact</a></li>
                 </ul>

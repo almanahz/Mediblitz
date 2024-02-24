@@ -1,0 +1,59 @@
+{% extends 'main/index.html' %}
+
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='user_page.css') }}">
+<style>
+    .blog-container {
+  max-width: 800px;
+  width: 80%;
+  margin: 10px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.blog-header {
+  margin-bottom: 20px;
+}
+
+.blog-title {
+  font-size: 28px;
+  margin: 0;
+}
+
+.image-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.blog-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.blog-content {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Additional styles can be added based on your preferences */
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="blog-container">
+    <div class="blog-header">
+      <h1 class="blog-title">{{ post.headline | safe}}</h1>
+    </div>
+    <div class="image-container">
+      <img src="{{ url_for('static', filename='user_images/' + post.image_path) }}" alt="{{ post.image_path }}" class="blog-image">
+    </div>
+    <div class="blog-content">
+      {{ post.body | safe }}
+    </div>
+  </div>
+{% endblock %}

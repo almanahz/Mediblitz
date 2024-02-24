@@ -9,6 +9,7 @@ class Config:
     FLASKY_MAIL_SUBJECT_PREFIX = '[Octamedic]'
     FLASKY_MAIL_SENDER = 'Octamedic Admin <octamedicc@gmail.com>'
     FLASKY_ADMIN = os.environ.get('OCTAMEDIC_ADMIN')
+    UPLOADED_PHOTOS_DEST= './app/images/'
 
     @staticmethod
     def init_app(app):
