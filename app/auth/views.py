@@ -55,6 +55,9 @@ def register():
             token = user.generate_confirmation_token(user.id)
             send_mail(current_app, user.email, 'Confirm Your Account', 'auth/conf_email', user=user, token=token)
             flash('A confirmation email has been sent to your registered email address')
+            token = TokenUsed(token=token)
+            db.session.add(token)
+            db.session.commit()
             flash('You can now login.')
             return redirect(url_for('auth.login'))
 
