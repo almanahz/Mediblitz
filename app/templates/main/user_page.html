@@ -311,7 +311,7 @@ margin-right: auto;
 .activities {
         display: flex;
     }
-.activities div {
+.activities > div {
   background-image: url('/static/images/background1.jpg');
   background-size: cover;
   margin-left: 10px;
@@ -362,6 +362,16 @@ margin-right: auto;
   border-radius: 5px;
 }
 
+.quiz-table {
+  width: 100%;
+  text-align: left;
+  font-size: medium;
+}
+
+td, th {
+  padding: 10px;
+  border-bottom: solid blue;
+}
 </style>
 {% endblock %}
 
@@ -457,6 +467,24 @@ margin-right: auto;
               </div>
               <div>
                 <h2>Recent quiz taken</h2>
+                <div class="quiz-taken">
+                  <table class="quiz-table">
+                      <thead>
+                        <tr>
+                          <th>Category</th>
+                          <th>Score</th>                   
+                        </tr>
+                      </thead>
+                      <tbody >
+                        {% for quiz in quizzes_taken %}
+                            <tr class="t-body">
+                              <td style="text-transform: capitalize;">{{ quiz.quiz_name }}</td>
+                              <td>{{ quiz.score }}</td>                       
+                            </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+              </div>
               </div>
             </div>
         <a href="{{url_for('auth.logout')}}"><button class="start-button">LogOut</button></a>

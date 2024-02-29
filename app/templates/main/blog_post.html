@@ -66,7 +66,7 @@
                 <div style="margin-left: 5%;"class="masonry-blog clearfix">
                     
 
-                    {% for post in selected_posts %}
+                    {% for post in selected_posts[:3] %}
                     
                     <div style="width: 400px; height: 400px;" class="right-side hidden-md-down">
                         
@@ -187,7 +187,7 @@
                                 <h2 class="widget-title">Recent Posts</h2>
                                 <div class="blog-list-widget">
                                     <div class="list-group">
-                                        {% for post in posts[:6] %}
+                                        {% for post in posts[:5] %}
                                         <a href="{{ url_for('main.blog_id', id=post.id|string)}}" class="list-group-item list-group-item-action flex-column align-items-start">
                                             <div class="w-100 justify-content-between">
                                                 {% if post.image_path %}
