@@ -65,6 +65,14 @@ def edit_profile():
     form.about_me.data = current_user.about_me
     return render_template('main/edit_profile.html', form=form)
 
+@main.route('/user/edit_post/<id>', methods=['GET', 'POST'])
+def edit_post(id):
+    form = PostForm()
+    post = Post.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        
+    return render_template('main/blog_entry.html')
+
 @main.route('/quiz_intro')
 def quiz_intro():
     logged_in = session.get('user_id')

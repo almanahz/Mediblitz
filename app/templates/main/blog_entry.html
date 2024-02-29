@@ -110,13 +110,13 @@
     <div class="form-group">
       {{ form.title.label(class='form-label') }}
       {{ form.title(class='form-control') }}
+      
     </div>
 
     <div>
       {{ form.category.label(class='form-label') }}
       {{ form.category(size=50, class='form-control') }}
       {% for error in form.category.errors %}
-        <span class="kgfdjjkfgkjfgerror">{{ error }}</span>
       {% endfor %}
     </div>
     <br>
