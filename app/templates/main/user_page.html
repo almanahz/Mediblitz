@@ -2,11 +2,7 @@
 {% block css %}
 {{ super() }}
 <style>/* Basic styling for the user home page layout */
-  body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-  }
+  
   
   header {
       background-color: #333;
@@ -22,6 +18,7 @@
     border: 1px solid #ddd;
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-image: url('/static/images/user_pg_bkg.jpg');
   }
   
   
@@ -33,15 +30,22 @@
     #user-info-section {
     display: flex;
     justify-content: space-between;
-    background-color: aqua;
+    background-image:url('/static/images/background1.jpg');
     border-radius: 5px;
     padding: 20px;
     margin-top: 10px;
+    color: #ffffff;
+}
+
+.hor-line {
+  background-color: rgb(170, 203, 233);
+  width: 0.5%;
 }
 
 .user-info {
     width: 40%; /* Adjust the width as needed */
 }
+
 
 .user-about-section {
 
@@ -52,6 +56,7 @@
       display: flex;
       margin-bottom: 20px;
       background-color: #f1f1f1;
+      border-radius: 5px;
   }
   
   .quiz-card img {
@@ -88,8 +93,9 @@ overflow: hidden;
 margin: 10px;
 min-width: 270px;
 max-width: 310px;
-max-height: 280px;
-width: 100%;
+height: 280px;
+border-radius: 5px;
+
 background: #000000;
 text-align: left;
 }
@@ -103,7 +109,10 @@ opacity: 1;
 width: 100%;
 -webkit-transition: opacity 0.35s;
 transition: opacity 0.35s;
+height: 100%;
+border-radius: 5px;
 }
+
 figure.snip0016 figcaption {
 position: absolute;
 bottom: 0;
@@ -216,52 +225,199 @@ margin-right: auto;
         color: red;
       }
       
+.set-menu {
+        display: none;
+        position: absolute;
+        padding: 12px 16px;
+        z-index: 00000;
+        margin-top: 30px;
+        background-color: #ddd;
+        color: black;
+        border-radius: 5px;
+        font-size: small;
+       
+      }
+    
+      .set-menu a {
+        display: block;
+        padding: 8px;
+        text-decoration: none;
+        color: inherit;
+        
+      }
+    
+      .set-div{
+          z-index: 10;
+          float: right;
+      }
+    
+      .set-but {
+          background-color: #4070F4;
+          width: 100px;
+          float: right;
+          border-radius: 10px;
+          color: #f0eaea;
+          display: flex;
+          justify-content: center;
+          box-shadow: none;
+          border-color: rgb(252, 252, 252);
+      }
+
+      .set-but:hover {
+        background-color: #2a61f8;
+      }
+    
+      .set-logo {
+        width: 20%;
+        
+      }
+      
+      .ver-img {
+        width: 20px;
+      }
+      .ver {
+        color: limegreen
+      }
+      .unver {
+        color: red;
+      }
+
+      .start-button {
+    margin-top: 30px;
+    padding: 5px 10px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #cc2c41;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    float: right;
+}
+
+.mybody {
+  background-image: url('/static/images/user_pg_bkg2.jpg');
+  color: #f1f1f1;
+}
+
+#quiz-section {
+  color: #000000;
+}
+
+.mySlides{
+  height: 100%;
+}
+
+.activities {
+        display: flex;
+    }
+.activities div {
+  background-image: url('/static/images/background1.jpg');
+  background-size: cover;
+  margin-left: 10px;
+  border-radius: 5px;
+  padding: 15px;
+  width: 50%;
+  font-size: small;
+  flex-direction: column;
+}
+
+.activities div small {
+  display: block;
+  text-align: right;
+  margin-top: -20px;
+  margin-right: 5px;
+  margin-bottom: 20px;
+}
+
+.activities a {
+  text-decoration: none;
+  color: rgb(24, 26, 24);
+}
+
+.activities a:hover {
+  text-decoration: underline;
+}
+
+
+.postwritten span:nth-child(odd) a {
+  display: block;
+  background-color: rgba(40, 135, 224, 0.5);
+  color: #000000;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+
+}
+
+
+
+.postwritten span:nth-child(even) a {
+  display: block;
+  background-color: rgba(104, 152, 197, 0.5);
+  color: #041124;
+  font-weight: bold;
+
+  padding: 10px;
+  border-radius: 5px;
+}
+
 </style>
 {% endblock %}
 
 
-<body>
   {% block content %}
-  
+  <body class="mybody">
+
     <div class="container">
       <h2>Dashboard</h2>
-      <img class='prof_pic' src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample41.jpg" alt="sample41"/>
+      <div class="set-div">
+        <button class="set-but" onclick="settoggleMenu()"><img class="set-logo" src="{{ url_for('static', filename='images/icons8-settings-50.png') }}" onclick="settoggleMenu()">Settings</button>
+        <div id="settingsMenu" class="set-menu">
+          {% if verified %}
+          <small> Account Status:</small><span class="ver"> Verified </span><img class="ver-img" src="{{ url_for('static', filename='images/checked.png') }}"> </a>
+          {% else %}
+          <a href="{{ url_for('auth.verification') }}"><small> Account Status:</small><span class="unver">Unverified</span><img class="ver-img" src="{{ url_for('static', filename='images/unchecked.png') }}"></a>
+          {% endif %}
+          <a href="{{ url_for('auth.change_password') }}"><small>Change Password</small></a>
+          <a href="{{ url_for('main.edit_profile') }}">Edit profile</a>
+          
+        <a href="{{ url_for('auth.logout')}}"><button class="start-button">LogOut</button></a>
+
+        </div>
+        </div>
+        <img class='prof_pic' src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample41.jpg" alt="sample41"/>
 
         <section id="user-info-section">
             <div class="user-info">
                 <h2>{{ user.first_name }} {{ user.other_names }}</h2>
-                <div class="status-div">
-                    {% if verified %}
-                    <small> Account Status:</small><span class="ver"> Verified </span><img class="ver-img" src="{{ url_for('static', filename='images/checked.png') }}"> </a>
-                    {% else %}
-                    <a href="{{ url_for('auth.verification') }}"><small> Account Status:</small><span class="unver"> Unverified</span><img class="ver-img" src="{{ url_for('static', filename='images/unchecked.png') }}"></a>
-                    {% endif %}
-                  </div>
-                <p>Email: {{ user.email }}</p>
-                <p>Location: {{ user.location }}</p>
-                <p>Member since: {{ user.member_since }}.</p>
-                  <p>Last seen {{ user.last_seen }}.</p>
-                  <p><a href="{{ url_for('main.edit_profile') }}">Edit profile</a></p>
+                <p><strong style="font-size: small;">Email:</strong> {{ user.email }}</p>
+                <p><strong style="font-size: small;">Location:</strong> {{ user.location }}</p>
+                <p><strong style="font-size: small;">Member since:</strong> {{ user.m_since() }}.</p>
+                  <p><strong style="font-size: small;">Last login:</strong> {{ user.l_seen() }}.</p>
             </div>
+            <div class="hor-line"></div>
             <div class="user-about-section">
                 <h3>About Me</h3>
                 {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
             </div>
+           
         </section>
+    
+        <br>
+
         <section id="quiz-section">
             <div>
                 
                 <div class="quiz-card">
                     <figure class="snip0016">
-                        <div>
-                        <img  class="mySlides" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample41.jpg" alt="sample41"/>
-                        <img class="mySlides" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample43.jpg" alt="sample41"/>
-                        <img class="mySlides" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample41.jpg" alt="sample41"/>
-                        </div>
+                        <img  class="mySlides" src="{{url_for('static', filename='images/AIhealthcare.jpeg')}}" alt="sample41"/>
+                        <img class="mySlides" src="/static/images/Healthcare.jpeg" alt="sample41"/>
+                        <img class="mySlides" src="/static/images/The-Future-of-Healthcare-Technology.jpg" alt="sample41"/>
                         <figcaption>
                             <h2>Unleashing <span>Boundless</span> Discoveries</h2>
                             <p>Where Data Science and Medicine Converge</p>
-                          <a href="{{ url_for('main.quiz_intro')}}"></a>
+                          <a href="{{ url_for('main.blog')}}"></a>
                         </figcaption>     
                       </figure>
                     <div class="quiz-info">
@@ -270,9 +426,10 @@ margin-right: auto;
                         <a href="{{ url_for('main.blog')}}">Read Articles</a>
                     </div> 
                 </div>
+                <hr>
                 <div class="quiz-card">
                     <figure class="snip0016">
-                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample41.jpg" alt="sample41"/>
+                        <img src="/static/images/quiz_bg.jpg" alt="sample41"/>
                         <figcaption>
                             <h2>Discover <span>the Intersection</span> of Tech and Health</h2>
                         </figcaption>     
@@ -284,12 +441,28 @@ margin-right: auto;
                     </div> 
                 </div>
             </div>
-            <h2>Recent Activities</h2>
-            <div class="quiz-list">
-                <div class="quiz-card">
-                  </div>
+            
+
+               
         </section>
+        <h2>Activities</h2>
+            <div class="activities">
+              <div class="postwritten">
+                <h2>Post written</h2>
+                {% for post in posts_written[:6] %}
+                <span class="postspan" >
+                <a href="{{ url_for('main.blog_id', id=post.id) }}"><p>{{ post.headline | safe }} </p></a><small>{{ post.blog_timestamp() }}</small>
+                </span>
+                {% endfor %}
+              </div>
+              <div>
+                <h2>Recent quiz taken</h2>
+              </div>
+            </div>
+        <a href="{{url_for('auth.logout')}}"><button class="start-button">LogOut</button></a>
+
     </div>
+    
 </body>
 {% block script %}
     
@@ -309,6 +482,20 @@ margin-right: auto;
     x[myIndex-1].style.display = "block";  
     setTimeout(carousel, 2000); // Change image every 2 seconds
   }
+  
+    function settoggleMenu() {
+      var menu = document.getElementById("settingsMenu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+    
+    document.addEventListener("click", function(event) {
+    var menu = document.getElementById("settingsMenu");
+    var button = document.querySelector(".set-but");
+
+    if (event.target !== menu && event.target !== button) {
+      menu.style.display = "none";
+    }
+  });
   </script>
   {% endblock %}
 {% endblock %}

@@ -696,6 +696,9 @@ div.tab button:hover {
     border-radius: 5px;
     line-height: 15px;
     display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -1675,3 +1678,36 @@ hr.invis3 {
     -o-border-radius: 50%;
     border-radius: 50%
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+  }
+  
+  .pagination li {
+    margin: 0 5px;
+  }
+  
+  .pagination a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .pagination a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pagination .active a {
+    background-color: #555;
+    color: #fff;
+  }
+  
+  .pagination .disabled a {
+    opacity: 0.5;
+    pointer-events: none;
+  }

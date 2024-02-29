@@ -27,4 +27,7 @@ class PostForm(FlaskForm):
     category = StringField('Category', validators=[Length(0, 64)])
     image = FileField('Image')
 
+class CommentForm(FlaskForm):
+    body = StringField('', validators=[DataRequired()])
+    submit = SubmitField('Submit')
     

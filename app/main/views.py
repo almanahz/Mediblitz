@@ -1,10 +1,11 @@
 from flask import render_template, session, redirect, url_for, abort, request, flash, current_app
 from flask_login import login_required, current_user
 from . import main
-from .forms import ContactUs, EditProfileForm, PostForm
+from .forms import ContactUs, EditProfileForm, PostForm, CommentForm
 from .. import db
 from ..models import User, AnatomyQuestion, PhysiologyQuestion,\
-    BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable, GeneralQuestion, PathologyQuestion, Post, Permission
+    BiochemistryQuestion, MicrobiologyQuestion, PharmacologyQuestion, ScoreTable,\
+        GeneralQuestion, PathologyQuestion, Post, Permission, Comment
 from flask_mail import Message
 from .. import mail
 import os
@@ -79,7 +80,11 @@ def user():
     user = User.query.filter_by(id=session.get('user_id')).first()
     if user is None:
         abort(404)
-    return render_template('main/user_page.html', user=user)
+    posts_written = Post.query.filter_by(author_id=session.get('user_id')).all()
+    quizzes_taken = ScoreTable.query.filter_by(user_id=session.get('user_id')).all()
+    return render_template('main/user_page.html',\
+                           user=user, posts_written=posts_written,\
+                            quizzes_taken=quizzes_taken)
 
 @main.route('/user_quiz', methods=['GET', 'POST'])
 @login_required
@@ -189,10 +194,13 @@ def result():
     
 @main.route('/blog', methods=['GET', 'POST'])
 def blog():
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    random.shuffle(posts)
-    selected_posts = posts[:6]
-    return render_template('main/blog_post.html', posts=posts, selected_posts=selected_posts)
+    page = request.args.get('page', 1, type=int)
+    row_posts = Post.query.order_by(Post.timestamp.desc()).all()
+    random.shuffle(row_posts)
+    selected_posts = row_posts[:6]
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page=page, per_page=1, error_out=False)
+    posts = pagination.items
+    return render_template('main/blog_post.html', posts=posts, selected_posts=selected_posts, pagination=pagination)
 
 @login_required
 @main.route('/create_blog', methods=['GET', 'POST'])
@@ -200,14 +208,18 @@ def create_blog():
     form = PostForm()
     save_dir = '/home/abdulqudus/ALX_PROJECTS/github/Mediblitz/app/templates/static/user_images'
     if(request.method == 'POST'):
-        image = request.files['image']
+        if(request.files['image']):
+            image = request.files['image']
+            image_filename = image.filename
+            image.save(os.path.join(save_dir, image_filename))
+        else:
+            image = 'planbg.jpg'
         post = Post(body=request.form.get('body'),
                     author=current_user._get_current_object(),
                     category=form.category.data,
                     headline=form.title.data,
-                    image_path=image.filename)
+                    image_path=image_filename)
         db.session.add(post)
-        image.save(os.path.join(save_dir, image.filename))
         db.session.commit()
         flash('Post Successfully submitted')
         return redirect(url_for('main.create_blog'))
@@ -217,4 +229,16 @@ def create_blog():
 @main.route('/blog/<id>/', methods=['GET', 'POST'])
 def blog_id(id):
     post = Post.query.filter_by(id=id).first()
-    return render_template('main/post.html', post=post)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body=form.body.data,
+                          post=post,
+                          author=current_user._get_current_object())
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment has been published')
+        return redirect(url_for('main.blog_id', id=id))
+    
+    comments = Comment.query.filter_by(post_id=post.id).all()
+    return render_template('main/post.html', post=post, comments=comments, form=form)
+

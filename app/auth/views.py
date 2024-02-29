@@ -157,3 +157,9 @@ def change_pword_forgotten(token):
                 except:
                     return "Email has not yet been registered or Token is invalid"
         return render_template('auth/forg_new_password.html', form=form)
+
+@auth.before_app_request
+def before_request():
+    if current_user:
+        if current_user.is_authenticated:
+            current_user.ping()

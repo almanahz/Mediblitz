@@ -6,11 +6,12 @@
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet"> 
     <link href="{{ url_for('static', filename='bootstrap.css')}}" rel="stylesheet">
     <link href="{{ url_for('static', filename='font-awesome.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ url_for('static', filename='style.css')}}" rel="stylesheet">
     <link href="{{ url_for('static', filename='responsive.css')}}" rel="stylesheet">
     <link href="{{ url_for('static', filename='colors.css')}}" rel="stylesheet">
     <link href="{{ url_for('static', filename='garden.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 {% endblock %}
 
 {% block content %}
@@ -73,13 +74,13 @@
                             {% if post.image_path %}
                             <img src="{{ url_for('static', filename='user_images/' + post.image_path) }}" alt="{{post.image_path}}" class="img-fluid img-fluid-row">
                             {% else %}
-                            <img src="{{ url_for('static', filename='images/garden_sq_01.jpg') }}" alt="" class="img-fluid img-fluid-row">
+                            <img src="{{ url_for('static', filename='images/planebg.jpg') }}" alt="" class="img-fluid img-fluid-row">
                             {% endif %}                             <div class="shadoweffect">
                                 <div class="shadow-desc">
                                     <div class="blog-meta">
                                         <span class="bg-aqua"><a href="blog-category-01.html" title="">{{post.category}}</a></span>
                                         
-                                        <h4><a href="garden-single.html" title="">{{ post.headline }}</a></h4>
+                                        <h4><a href="{{ url_for('main.blog_id', id=post.id|string)}}" title="">{{ post.headline }}</a></h4>
                                         <small><a href="garden-single.html" title="">{{ post.blog_timestamp() }}</a></small>
                                         <small><a href="#" title="">{{ post.author.first_name }}</a></small>
                                     </div><!-- end meta -->
@@ -109,7 +110,7 @@
                                                 {% if post.image_path %}
                                                 <img src="{{ url_for('static', filename='user_images/'+post.image_path) }}" alt="{{post.image_path}}" class="img-fluid">
                                                 {% else %}
-                                                <img src="{{ url_for('static', filename='images/garden_sq_01.jpg') }}" alt="" class="img-fluid">
+                                                <img src="{{ url_for('static', filename='images/planebg.jpg') }}" alt="" class="img-fluid">
                                                 {% endif %}
                                                 <div class="hovereffect"></div>
                                             </a>
@@ -122,12 +123,12 @@
 
                                         <p>
                                             {% if post.body|length > 60 %}
-                                                {{ post.body[:200] | safe}}... <a href="#">Read More</a>
+                                                {{ post.body[:200] | safe}}... <a href="{{ url_for('main.blog_id', id=post.id|string)}}">Read More</a>
                                             {% else %}
                                                 {{ post.body | safe}}
                                             {% endif %}
                                         </p>
-                                        <small><a href="garden-single.html" title="">{{ post.blog_timestamp() }}</a></small>
+                                        <small><a href="{{ url_for('main.blog_id', id=post.id|string)}}" title="">{{ post.blog_timestamp() }}</a></small>
                                         <small><a href="#" title="">by {{post.author.first_name}}</a></small>
                                     </div><!-- end meta -->
                                 </div><!-- end blog-box -->
@@ -139,23 +140,35 @@
                                 <hr class="invis"><hr class="invis">
                             </div><!-- end blog-list -->
                         </div><!-- end page-wrapper -->
-
-                        <hr class="invis">
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div aria-label="Page navigation">
-                                    <ul class="pagination justify-content-start">
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">Next</a>
+                        <ul class="pagination">
+                            <li{% if not pagination.has_prev %} class="disabled"{% endif %}>
+                                <a href="{% if pagination.has_prev %}{{ url_for('main.blog',
+                                        page = pagination.page - 1) }}{% else %}{% endif %}">
+                            &laquo;
+                            </a>
+                            </li>
+                            {% for p in pagination.iter_pages() %}
+                                {% if p %}
+                                    {% if p == pagination.page %}
+                                        <li class="active">
+                                            <a href="{{ url_for('main.blog', page = p) }}">{{ p }}</a>
                                         </li>
-                                    </ul>
-                                </div>
-                            </div><!-- end col -->
-                        </div><!-- end row -->
+                                    {% else %}
+                                        <li>
+                                            <a href="{{ url_for('main.blog', page = p) }}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% else %}
+                                    <li class="disabled"><a href="#">&hellip;</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            <li{% if not pagination.has_next %} class="disabled"{% endif %}>
+                            <a href="{% if pagination.has_next %}{{ url_for('main.blog',
+                            page = pagination.page + 1) }}{% else %}{% endif %}">
+                            &raquo;
+                            </a>
+                            </li>
+                        </ul>
                     </div><!-- end col -->
 
                     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -174,11 +187,15 @@
                                 <h2 class="widget-title">Recent Posts</h2>
                                 <div class="blog-list-widget">
                                     <div class="list-group">
-                                        {% for post in posts %}
-                                        <a href="garden-single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        {% for post in posts[:6] %}
+                                        <a href="{{ url_for('main.blog_id', id=post.id|string)}}" class="list-group-item list-group-item-action flex-column align-items-start">
                                             <div class="w-100 justify-content-between">
-                                                <img src="{{ url_for('static', filename='images/garden_sq_09.jpg') }}" alt="" class="img-fluid float-left">
-                                                <h5 class="mb-1">5 Beautiful buildings you need to before dying</h5>
+                                                {% if post.image_path %}
+                                                <img src="{{ url_for('static', filename='user_images/'+post.image_path) }}" alt="{{post.image_path}}" class="img-fluid">
+                                                {% else %}
+                                                <img src="{{ url_for('static', filename='images/planebg.jpg') }}" alt="" class="img-fluid">
+                                                {% endif %}
+                                                <h5 class="mb-1">{{ post.headline }}</h5>
                                                 <small>12 Jan, 2016</small>
                                             </div>
                                         </a>
@@ -187,7 +204,7 @@
                                     </div>
                                 </div><!-- end blog-list -->
                             </div><!-- end widget -->
-
+                            
                             <div class="widget">
                                 <h2 class="widget-title">Advertising</h2>
                                 <div class="banner-spot clearfix">
@@ -241,9 +258,9 @@
                 
             </div><!-- end container -->
         </footer><!-- end footer -->
-
+        {% if current_user.is_authenticated %}
         <a href="{{ url_for('main.create_blog')}}"><div class="dmtop">Write Article <i class="fa fa-pencil pencil" style="font-size:30px;color:rgb(50, 50, 241)"></i></div></a>
-        
+        {% endif %}
     </div><!-- end wrapper -->
 
     <!-- Core JavaScript

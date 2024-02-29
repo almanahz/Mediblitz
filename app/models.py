@@ -29,7 +29,17 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
+
+    def l_seen(self):
+        return datetime.strftime(self.last_seen, '%d-%b-%Y')
+    def m_since(self):
+        return datetime.strftime(self.member_since, '%d-%b-%Y')
+    def ping(self):
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
+
+
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
@@ -226,6 +236,20 @@ class Post(db.Model):
     category = db.Column(db.String(255))
     headline = db.Column(db.Text)
     image_path = db.Column(db.String(255))
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+
+    def blog_timestamp(self):
+        return datetime.strftime(self.timestamp, '%d-%b-%Y')
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    disabled = db.Column(db.Boolean)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
     def blog_timestamp(self):
         return datetime.strftime(self.timestamp, '%d-%b-%Y')
