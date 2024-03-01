@@ -327,39 +327,32 @@ margin-right: auto;
   text-align: right;
   margin-top: -20px;
   margin-right: 5px;
-  margin-bottom: 20px;
 }
 
 .activities a {
   text-decoration: none;
-  color: rgb(24, 26, 24);
+  color: rgb(216, 221, 228);
 }
 
-.activities a:hover {
+.activities a4070F4:hover {
   text-decoration: underline;
 }
 
 
-.postwritten span:nth-child(odd) a {
+.postspan {
   display: block;
   background-color: rgba(40, 135, 224, 0.5);
-  color: #000000;
+  color: #f7f7f7;
   font-weight: bold;
   padding: 10px;
   border-radius: 5px;
-
+  margin-bottom: 5px;
 }
 
 
 
-.postwritten span:nth-child(even) a {
-  display: block;
-  background-color: rgba(104, 152, 197, 0.5);
-  color: #041124;
-  font-weight: bold;
-
-  padding: 10px;
-  border-radius: 5px;
+.postspan:nth-child(even) {
+  background-color: rgba(3, 117, 223, 0.5);
 }
 
 .quiz-table {
@@ -460,9 +453,11 @@ td, th {
               <div class="postwritten">
                 <h2>Post written</h2>
                 {% for post in posts_written[:6] %}
-                <span class="postspan" >
+                <div class="postspan" >
                 <a href="{{ url_for('main.blog_id', id=post.id) }}"><p>{{ post.headline | safe }} </p></a><small>{{ post.blog_timestamp() }}</small>
-                </span>
+                <a href="{{ url_for('main.edit_post', id=post.id)}}">Edit Post</a>
+
+                </div>
                 {% endfor %}
               </div>
               <div>

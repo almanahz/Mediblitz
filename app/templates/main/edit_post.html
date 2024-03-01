@@ -1,0 +1,188 @@
+{% extends 'main/index.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+ 
+  {% block css %}
+  {{ super() }}  
+<style>
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: bold;
+    width: 100%;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .form-control {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .error {
+    color: red;
+    font-size: 14px;
+  }
+
+  .text {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+
+  .butsub {
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  float: right;
+  width: 180px;
+}
+
+.butsub[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* file upload button */
+.image::file-selector-button {
+  border-radius: 4px;
+  padding: 0 16px;
+  height: 40px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+  margin-right: 16px;
+  transition: background-color 200ms;
+}
+
+/* file upload button hover state */
+.image::file-selector-button:hover {
+  background-color: #f3f4f6;
+}
+
+@supports (-moz-appearance: none) {
+  .image::file-selector-button {
+    color: #0964b0;
+  }
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<script src="https://cdn.tiny.cloud/1/56j3bltjapgd6wo2un1lnb7w2qneuiow671vlhck7lllr9sd/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: '#body',
+      plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+      toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
+      menubar: false,
+      height: 300
+    });
+  </script>
+<body>
+  <form class="form-container" method="POST" action="/edit_blog"  enctype="multipart/form-data">
+    <div class="form-group">
+      {{ form.title.label(class='form-label') }}
+      {{ form.title(class='form-control') }}
+      
+    </div>
+
+    <div>
+      {{ form.category.label(class='form-label') }}
+      {{ form.category(size=50, class='form-control') }}
+      {% for error in form.category.errors %}
+      {% endfor %}
+    </div>
+    <br>
+    <div>
+      {{ form.image(class="image", id="image") }}
+      <button id="deleteBtn" type="button" class="close" aria-label="Close">
+      X</button><h6>{{ post.image_path}}</h6>
+      <img style="width:100px; height:120px;" src="/static/user_images/{{post.image_path}}">
+      {% for error in form.image.errors %}
+        <span class="error">{{ error }}</span>This
+      {% endfor %}
+    </div>
+    <br>
+    <div>
+      <label for="body">Content</label>
+      <textarea id="body" placeholder="Your text goes here ..." name="body">{{ form.body.data}}</textarea>
+    </div>
+    <br>
+
+    {{form.submit(class='butsub')}}
+  </form>
+</body>
+<script>
+    function validateImageSize() {
+        var input = document.getElementById('image');
+        var file = input.files[0];
+        var maxSize = 500 * 1024; // 500KB
+
+        if (file && file.size > maxSize) {
+            alert('Please select an image file smaller than 500KB.');
+            input.value = ''; // Clear the file input
+            return false;
+        }
+
+        return true;
+    }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var deleteBtn = document.getElementById('deleteBtn');
+  var image = document.querySelector('.close');
+
+  deleteBtn.addEventListener('click', function() {
+    var imageSrc = "/static/user_images/{{ post.image_path }}";
+
+    // Send an AJAX request to delete the image
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/delete_image/{{post.id}}', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          alert("image deleted")
+          image.parentNode.removeChild(image);
+        } else {
+          // Handle error
+          console.error('Failed to delete image');
+        }
+      }
+    };
+
+    // Send the image source as the payload
+    var data = JSON.stringify({ imageSrc: imageSrc });
+    xhr.send(data);
+  });
+});
+</script>
+
+{% endblock %}
+</html>

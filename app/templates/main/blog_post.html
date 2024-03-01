@@ -196,7 +196,7 @@
                                                 <img src="{{ url_for('static', filename='images/planebg.jpg') }}" alt="" class="img-fluid">
                                                 {% endif %}
                                                 <h5 class="mb-1">{{ post.headline }}</h5>
-                                                <small>12 Jan, 2016</small>
+                                                <small>{{ post.blog_timestamp() }}</small>
                                             </div>
                                         </a>
                                         {% endfor %}
@@ -238,7 +238,6 @@
                     <div class="col-lg-8 offset-lg-2">
                         <div class="widget">
                             <div class="footer-text text-center">
-                                <a href="index.html"><img src="{{ url_for('static', filename='images/garden-footer-logo.png') }}" alt="" class="img-fluid"></a>
                                 <p>Octamedic is a dedicated platform showcasing curated content on medical advancements, healthcare practices, and insights from experts in the field.</p>
                                
 

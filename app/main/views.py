@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, url_for, abort, request, flash, current_app
+from flask import render_template, session, redirect, url_for, abort, request, flash, current_app, send_from_directory
 from flask_login import login_required, current_user
 from . import main
 from .forms import ContactUs, EditProfileForm, PostForm, CommentForm
@@ -69,9 +69,25 @@ def edit_profile():
 def edit_post(id):
     form = PostForm()
     post = Post.query.filter_by(id=id).first()
+    save_dir = '/home/abdulqudus/ALX_PROJECTS/github/Mediblitz/app/templates/static/user_images'
     if form.validate_on_submit():
-        
-    return render_template('main/blog_entry.html')
+        os.remove(save_dir+form.image)
+        image = request.files['image']
+        image_filename = image.filename
+        image.save(os.path.join(save_dir, image_filename))
+        post.body = form.body
+        post.category = form.category
+        post.headline = form.title
+        post.image_path = image_filename 
+        db.session.add(post)
+        db.session.commit()
+        flash("Your post has been updated successfully")
+        return redirect('main.blog')
+    form.body.data = post.body
+    form.category.data = post.category
+    form.title.data = post.headline
+    form.image.data =  post.image_path
+    return render_template('main/edit_post.html', post=post, form=form)
 
 @main.route('/quiz_intro')
 def quiz_intro():
@@ -206,7 +222,7 @@ def blog():
     row_posts = Post.query.order_by(Post.timestamp.desc()).all()
     random.shuffle(row_posts)
     selected_posts = row_posts[:6]
-    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page=page, per_page=1, error_out=False)
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page=page, per_page=4, error_out=False)
     posts = pagination.items
     return render_template('main/blog_post.html', posts=posts, selected_posts=selected_posts, pagination=pagination)
 
@@ -249,4 +265,11 @@ def blog_id(id):
     
     comments = Comment.query.filter_by(post_id=post.id).all()
     return render_template('main/post.html', post=post, comments=comments, form=form)
+
+@main.route('/delete_image/<id>')
+def delete_image(id):
+    post = Post.query.get(id)
+    save_dir = '/home/abdulqudus/ALX_PROJECTS/github/Mediblitz/app/templates/static/user_images'
+    os.remove(save_dir, post.image_path)
+    post.image_path = ''
 
