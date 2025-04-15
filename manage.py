@@ -5,7 +5,7 @@ from app.models import User
 from flask import render_template
 
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'DevelopmentConfig')
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
 
 @app.cli.command()
